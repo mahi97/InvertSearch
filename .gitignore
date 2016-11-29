@@ -1,0 +1,6 @@
+DS.app/*
+*.user
+Makefile
+objs/*
+qrc_resource.cpp
+.qmake.stash
