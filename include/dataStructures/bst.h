@@ -3,17 +3,26 @@
 
 #include "dataStructures/tree.h"
 
+struct BSTNode : Node{
+    BSTNode* lc;
+    BSTNode* rc;
+};
 
 class BST : public Tree
 {
-    class BSTNode : Node{
-        BSTNode* lc;
-        BSTNode* rc;
-    };
 
 
 public:
     BST();
+    virtual void insert(Data*);
+//    virtual void del(size_t position);
+//    virtual void search(QString);
+//    virtual void search(QStringList);
+
+private:
+    void insert(Data *_data, BSTNode *&_node);
+    BSTNode* makeNode(Data*);
+    BSTNode* root;
 };
 
 #endif // BST_H

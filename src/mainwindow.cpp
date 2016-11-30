@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     search = new SearchThread(this);
     search->start(QThread::HighestPriority);
 
+    qDebug() << this->thread();
 
     tabDock = new TabDockWidget(this);
     addDockWidget(Qt::LeftDockWidgetArea, tabDock);
@@ -28,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
-
+    search->quit();
+    search->wait();
 }
 
 void MainWindow::initWidget(QTextEdit *_monitor) {

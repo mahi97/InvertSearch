@@ -6,30 +6,24 @@
 
 
 
+struct Node {
+    QString key;
+    LinkedList values;
+};
 
 class Tree
 {
-protected:
-    struct Node {
-        QString key;
-        LinkedList values;
-    };
 
 public:
     Tree();
-    void insert(Data*);
-    void del(size_t position);
-    void search(QString);
-    void search(QStringList);
-    void show();
-
+    virtual void insert(Data*)        = 0;
+    /*virtual*/ void del(size_t position) /*= 0*/;
+    /*virtual*/ void search(QString)      /*= 0*/;
+    /*virtual*/ void search(QStringList)  /*= 0*/;
 
 private:
 
-    QVector<Node*> nodes;
-
-    PropertyGet(qint64, size, Size);
-    Property(Node*, root, Root);
+    PropertyGet(qint64, Size, size);
 };
 
 #endif // TREE_H

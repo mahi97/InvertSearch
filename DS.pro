@@ -21,7 +21,7 @@ SOURCES += main.cpp\
     dataStructures/tst.cpp \
     dataStructures/trie.cpp \
     searchthread.cpp \
-    include/dataStructures/linkedlist.cpp
+    dataStructures/linkedlist.cpp
 
 HEADERS  += include/mainwindow.h \
     include/tabdockwidget.h \
@@ -32,7 +32,7 @@ HEADERS  += include/mainwindow.h \
     include/dataStructures/tst.h \
     include/dataStructures/trie.h \
     include/trees.h \
-    searchthread.h \
+    include/searchthread.h \
     include/dataStructures/linkedlist.h
 
 

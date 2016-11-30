@@ -15,6 +15,16 @@ TabDockWidget::TabDockWidget(QWidget *parent)
 
     w->setLayout(control);
     setWidget(w);
+
+    signalCounter = 0;
+
+    // Conecctions
+    connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_open()) );
+    connect(btnBuild , SIGNAL(clicked(bool)), this, SLOT(slt_build()));
+    connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
+    connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
+    connect(this, SIGNAL(sig_fileToBuild(QString)), search, SLOT(slt_buildFile(QString)), Qt::QueuedConnection);
+    connect(search, SIGNAL(sig_buildFinished()), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
 }
 
 TabDockWidget::~TabDockWidget() {
@@ -48,12 +58,6 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
     _layout->addLayout(btns);
     _layout->setAlignment(browse, Qt::AlignTop);
 
-    // Conecctions
-    connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_open()) );
-    connect(btnBuild , SIGNAL(clicked(bool)), this, SLOT(slt_build()));
-    connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
-    connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
-    connect(this, SIGNAL(sig_fileToBuild(QString)), search, SLOT(slt_buildFile(QString)), Qt::QueuedConnection);
 }
 
 /* SLOTS */
@@ -61,11 +65,12 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
 void TabDockWidget::slt_open() {
     qDebug() << "Open";
     QString tempDir;
-
-    tempDir = QFileDialog::getExistingDirectory(this,
-                                                "Please choose a Folder",
-                                                "",
-                                                QFileDialog::ShowDirsOnly);
+    QFileDialog fd;
+    tempDir = fd.getExistingDirectory(this,
+                                      "Please choose a Folder",
+                                      "",
+                                      QFileDialog::ShowDirsOnly);
+    fd.setFocus();
     if (tempDir.size() >= 3) {
         directory = tempDir;
         lineEditDirectory->setText(tempDir);
@@ -94,12 +99,22 @@ void TabDockWidget::slt_update() {
 }
 
 void TabDockWidget::slt_build() {
-    for (size_t i{}; i < files.size(); i++) {
-        BuildMaterial temp;
-        temp.file = files[i];
-        temp.name = names[i];
-        emit sig_fileToBuild(temp);
+    btnBuild->setEnabled(false);
+    cmbDataStrct->setEnabled(false);
+    Q_FOREACH(QString file, files) {
+        emit sig_fileToBuild(file);
+        signalCounter++;
     }
+
+}
+
+void TabDockWidget::slt_buildComplete() {
+    signalCounter--;
+    if (signalCounter == 0) {
+        btnBuild->setEnabled(true);
+        cmbDataStrct->setEnabled(true);
+    }
+
 }
 
 void TabDockWidget::slt_changeTree(QString _tree) {

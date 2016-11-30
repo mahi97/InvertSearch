@@ -4,16 +4,20 @@
 #include "dataStructures/tree.h"
 
 
+struct TSTNode : Node {
+    TSTNode* c[3];
+};
 
 class TST : public Tree
 {
 
-    struct TSTNode : Node {
-        TSTNode* c[3];
-    };
 
 public:
     TST();
+    virtual void insert(Data*)       ;
+//    virtual void del(size_t position);
+//    virtual void search(QString)     ;
+//    virtual void search(QStringList) ;
 };
 
 #endif // TST_H

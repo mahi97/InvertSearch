@@ -5,15 +5,19 @@
 
 
 
+struct TrieNode : Node {
+    QList<TrieNode*> c; //Children
+};
 
 class Trie : public Tree
 {
-    struct TrieNode : Node {
-        QList<TrieNode*> c; //Children
-    };
 
 public:
     Trie();
+    virtual void insert(Data*)       ;
+//    virtual void del(size_t position);
+//    virtual void search(QString)     ;
+//    virtual void search(QStringList) ;
 };
 
 #endif // TRIE_H

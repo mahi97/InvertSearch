@@ -4,3 +4,7 @@ TST::TST()
 {
 
 }
+
+void TST::insert(Data *) {
+
+}

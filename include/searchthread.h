@@ -28,11 +28,14 @@ class SearchThread : public QThread
 
 public:
     SearchThread(QObject *parent);
-
+    bool doSearch{false};
 private:
     ETree treeEnum;
     Tree* tree;
     QStringList stopWord;
+    QFile* file;
+    QStringList files;
+    void run();
 
     void build(QByteArray _data, unsigned int _lineNum, QString _filename);
     Data* makeData(const QString& _word,
@@ -41,7 +44,7 @@ private:
                   const QString& _file);
 public slots:
     void slt_chooseTree(ETree);
-    void slt_buildFile(BuildMaterial);
+    void slt_buildFile(QString);
 
 signals:
     void sig_buildFinished();

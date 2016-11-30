@@ -17,13 +17,14 @@ public:
         head = NULL;
     }
 
-    void insert(Data _node);
+    void insert(Data* _node);
     void remove();
     Node* pop();
     Node* at(int _index);
+    size_t size();
 
 private:
-
+    size_t m_size;
     Node* first;
     Node* head;
 

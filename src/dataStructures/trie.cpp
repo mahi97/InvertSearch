@@ -4,3 +4,7 @@ Trie::Trie()
 {
 
 }
+
+void Trie::insert(Data *) {
+
+}

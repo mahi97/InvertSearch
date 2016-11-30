@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QStandardItem>
 #include <QListWidget>
+#include <QApplication>
 
 #include "base.h"
 #include "searchthread.h"
@@ -48,15 +49,19 @@ private:
     QListWidget *fileViewer;
     QStringList files, names;
 
+    int signalCounter;
+
 public slots:
     void slt_open();
     void slt_update();
     void slt_build();
     void slt_changeTree(QString _tree);
+    void slt_buildComplete();
+
 
 signals:
     void sig_changeTree(ETree);
-    void sig_fileToBuild(BuildMaterial);
+    void sig_fileToBuild(QString);
 
 
 };
