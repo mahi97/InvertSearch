@@ -31,7 +31,6 @@ private:
     TerminalDockWidget *terminal;
 
 
-    Tree* tree;
 
 };
 

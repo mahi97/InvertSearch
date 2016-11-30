@@ -3,13 +3,15 @@
 
 #include "dataStructures/tree.h"
 
-struct TrieNode : Node {
-    QList<TrieNode*> c; //Children
-};
+
 
 
 class Trie : public Tree
 {
+    struct TrieNode : Node {
+        QList<TrieNode*> c; //Children
+    };
+
 public:
     Trie();
 };

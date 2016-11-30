@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     dataStructures/bst.cpp \
     dataStructures/tst.cpp \
     dataStructures/trie.cpp \
-    searchthread.cpp
+    searchthread.cpp \
+    include/dataStructures/linkedlist.cpp
 
 HEADERS  += include/mainwindow.h \
     include/tabdockwidget.h \
@@ -31,7 +32,9 @@ HEADERS  += include/mainwindow.h \
     include/dataStructures/tst.h \
     include/dataStructures/trie.h \
     include/trees.h \
-    searchthread.h
+    searchthread.h \
+    include/dataStructures/linkedlist.h
+
 
 INCLUDEPATH += $$PWD/include
 
@@ -40,4 +43,5 @@ MOC_DIR = $$PWD/objs/
 
 CONFIG += c++14
 
-RESOURCES +=
+RESOURCES += \
+    resource.qrc

@@ -53,6 +53,7 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
     connect(btnBuild , SIGNAL(clicked(bool)), this, SLOT(slt_build()));
     connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
     connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
+    connect(this, SIGNAL(sig_fileToBuild(QString)), search, SLOT(slt_buildFile(QString)), Qt::QueuedConnection);
 }
 
 /* SLOTS */
@@ -76,24 +77,28 @@ void TabDockWidget::slt_open() {
 
 void TabDockWidget::slt_update() {
     files.clear();
+    names.clear();
     QDirIterator it(directory);
     QStringList tempList;
     while (it.hasNext()) {
         QString temp = it.next();
         if (temp.endsWith(".txt")) {
             QStringList ttemp;
-            files << temp;
             ttemp = temp.split(QDir::separator());
-            tempList.append(ttemp.back());
+            files << temp;
+            names << ttemp.back();
         }
     }
 
-    fileViewer->addItems(tempList);
+    fileViewer->addItems(names);
 }
 
 void TabDockWidget::slt_build() {
-    Q_FOREACH(QString file, files) {
-
+    for (size_t i{}; i < files.size(); i++) {
+        BuildMaterial temp;
+        temp.file = files[i];
+        temp.name = names[i];
+        emit sig_fileToBuild(temp);
     }
 }
 

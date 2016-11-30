@@ -22,20 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->addWidget(lll);
 
 
-    /* Tree */
-    tree = new Tree();
-    for (size_t i{0}; i < 10; i++) {
-        Node* tempNode = new Node();
-        tempNode->key = QString("Key : %1").arg(i);
-        for (size_t j{}; j < 5;j++) {
-            tempNode->files.append(QString("File %1,%2").arg(i).arg(j));
-        }
-        tree->insert(tempNode);
-    }
-
-    tree->show();
-
-
     /* Final */
 //    this->showMaximized();
     this->setWindowTitle(QString("DS Project (%1)").arg(QString(REVNUM)));

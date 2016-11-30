@@ -3,13 +3,15 @@
 
 #include "dataStructures/tree.h"
 
-class BSTNode : Node{
-    BSTNode* lc;
-    BSTNode* rc;
-};
 
 class BST : public Tree
 {
+    class BSTNode : Node{
+        BSTNode* lc;
+        BSTNode* rc;
+    };
+
+
 public:
     BST();
 };

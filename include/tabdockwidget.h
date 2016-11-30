@@ -46,7 +46,7 @@ private:
     QPushButton *Exit;
     QLineEdit *lineEditDirectory;
     QListWidget *fileViewer;
-    QStringList files;
+    QStringList files, names;
 
 public slots:
     void slt_open();
@@ -56,6 +56,7 @@ public slots:
 
 signals:
     void sig_changeTree(ETree);
+    void sig_fileToBuild(BuildMaterial);
 
 
 };

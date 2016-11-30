@@ -5,5 +5,6 @@
 #include "dataStructures/bst.h"
 #include "dataStructures/trie.h"
 #include "dataStructures/tst.h"
+#include "dataStructures/linkedlist.h"
 
 #endif // TREES_H

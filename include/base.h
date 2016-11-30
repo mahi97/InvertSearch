@@ -11,7 +11,7 @@
 
 
 // TODO : Add version control to base
-#define REVNUM "0.01"
+#define REVNUM "0.03"
 
 
 #define Property(type,name,local) \
@@ -24,13 +24,12 @@
         protected: type local
 
 
-enum class ETree {
-    None,
-    BST,
-    TST,
-    Trie
+struct Data {
+    QString key;
+    QString file;
+    unsigned int lineNum;
+    unsigned int wordNum;
 };
-
 
 
 #endif // BASE_H

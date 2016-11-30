@@ -2,21 +2,27 @@
 #define TREE_H
 
 #include "base.h"
+#include "dataStructures/linkedlist.h"
 
-struct Node {
-    QString key;
-    QStringList files;
-};
+
+
 
 class Tree
 {
+protected:
+    struct Node {
+        QString key;
+        LinkedList values;
+    };
+
 public:
     Tree();
-    void insert(Node*);
+    void insert(Data*);
     void del(size_t position);
     void search(QString);
     void search(QStringList);
     void show();
+
 
 private:
 
