@@ -8,6 +8,7 @@
 #include "tabdockwidget.h"
 #include "terminaldockwidget.h"
 #include "base.h"
+#include "trees.h"
 
 
 class MainWindow : public QMainWindow {
@@ -27,6 +28,8 @@ private:
     TerminalDockWidget *terminal;
     QTextEdit *monitor;
 
+
+    Tree* tree;
 
 };
 

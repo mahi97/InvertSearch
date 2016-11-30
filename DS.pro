@@ -15,12 +15,21 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     tabdockwidget.cpp \
-    terminaldockwidget.cpp
+    terminaldockwidget.cpp \
+    dataStructures/tree.cpp \
+    dataStructures/bst.cpp \
+    dataStructures/tst.cpp \
+    dataStructures/trie.cpp
 
 HEADERS  += mainwindow.h \
     tabdockwidget.h \
     terminaldockwidget.h \
-    base.h
+    base.h \
+    dataStructures/tree.h \
+    dataStructures/bst.h \
+    dataStructures/tst.h \
+    dataStructures/trie.h \
+    trees.h
 
 
 OBJECTS_DIR = $$PWD/objs/
