@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = DS
 TEMPLATE = app
 
-
+VPATH += $$PWD/src
 SOURCES += main.cpp\
         mainwindow.cpp \
     tabdockwidget.cpp \
@@ -19,18 +19,21 @@ SOURCES += main.cpp\
     dataStructures/tree.cpp \
     dataStructures/bst.cpp \
     dataStructures/tst.cpp \
-    dataStructures/trie.cpp
+    dataStructures/trie.cpp \
+    searchthread.cpp
 
-HEADERS  += mainwindow.h \
-    tabdockwidget.h \
-    terminaldockwidget.h \
-    base.h \
-    dataStructures/tree.h \
-    dataStructures/bst.h \
-    dataStructures/tst.h \
-    dataStructures/trie.h \
-    trees.h
+HEADERS  += include/mainwindow.h \
+    include/tabdockwidget.h \
+    include/terminaldockwidget.h \
+    include/base.h \
+    include/dataStructures/tree.h \
+    include/dataStructures/bst.h \
+    include/dataStructures/tst.h \
+    include/dataStructures/trie.h \
+    include/trees.h \
+    searchthread.h
 
+INCLUDEPATH += $$PWD/include
 
 OBJECTS_DIR = $$PWD/objs/
 MOC_DIR = $$PWD/objs/
