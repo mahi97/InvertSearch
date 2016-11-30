@@ -15,6 +15,7 @@ class TST : public Tree
 public:
     TST();
     virtual void insert(Data*)       ;
+    virtual void show();
 //    virtual void del(size_t position);
 //    virtual void search(QString)     ;
 //    virtual void search(QStringList) ;

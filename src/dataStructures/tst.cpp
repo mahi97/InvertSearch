@@ -8,3 +8,7 @@ TST::TST()
 void TST::insert(Data *) {
 
 }
+
+void TST::show() {
+
+}

@@ -29,3 +29,14 @@ BSTNode* BST::makeNode(Data *_data) {
     qDebug() << size << node->key;
     return node;
 }
+
+void BST::show() {
+    show(root);
+}
+
+void BST::show(BSTNode* _node) {
+    if (_node == NULL) return;
+    show(_node->lc);
+    qDebug() << _node->key << _node->values.size();
+    show(_node->rc);
+}

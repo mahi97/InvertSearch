@@ -36,7 +36,7 @@ private:
     QFile* file;
     QStringList files;
     void run();
-
+    bool toShow{false};
     void build(QByteArray _data, unsigned int _lineNum, QString _filename);
     Data* makeData(const QString& _word,
                   unsigned int _wordNum,

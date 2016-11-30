@@ -52,14 +52,18 @@ void SearchThread::run() {
                 in = file->readLine();
             }
             emit sig_buildFinished();
-//            qDebug() << file->fileName();
             file->close();
+            toShow = true;
         } else {
-            qDebug() << "hey";
+            qDebug() << ".";
+            if (toShow) {
+                toShow = false;
+                tree->show();
+            }
             sleep(1);
         }
     }
-//    exec();
+    //    exec();
 }
 
 void SearchThread::build(QByteArray _data,

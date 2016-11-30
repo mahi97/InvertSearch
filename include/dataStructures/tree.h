@@ -17,6 +17,7 @@ class Tree
 public:
     Tree();
     virtual void insert(Data*)        = 0;
+    virtual void show()               = 0;
     /*virtual*/ void del(size_t position) /*= 0*/;
     /*virtual*/ void search(QString)      /*= 0*/;
     /*virtual*/ void search(QStringList)  /*= 0*/;

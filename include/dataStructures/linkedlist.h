@@ -6,16 +6,13 @@
 class LinkedList {
 
     struct Node {
-        Data data;
+        Data* data;
         Node* next;
     };
 
 public:
 
-    LinkedList() {
-        first = NULL;
-        head = NULL;
-    }
+    LinkedList();
 
     void insert(Data* _node);
     void remove();
