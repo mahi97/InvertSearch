@@ -22,7 +22,7 @@ void TST::insert(Data *_data, TSTNode *& _node, size_t cursor) {
             insert(_data, _node->eq, cursor + 1);
         } else {
             _node->isEnd = true;
-            _node->value.insert(_data);
+            _node->values.insert(_data);
             _node->key_ = _data->key;
         }
     }
@@ -46,7 +46,7 @@ void TST::show(TSTNode *_node) {
     if (_node == NULL) return;
     show(_node->lt);
     if (_node->isEnd) {
-        qDebug() << _node->key_  << "FFF" << _node->value.size();
+        qDebug() << _node->key_  << "FFF" << _node->values.size();
     }
     show(_node->eq);
     show(_node->gt);

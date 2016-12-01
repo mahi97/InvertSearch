@@ -11,9 +11,9 @@ void BST::insert(Data* _data) {
 void BST::insert(Data *_data, BSTNode*& _node) {
     if (_node == NULL) {
         _node = makeNode(_data);
-    } else if (_data->key.toLower() > _node->key) {
+    } else if (_data->key.toLower() > _node->key_) {
         insert(_data, _node->rc);
-    } else if (_data->key.toLower() < _node->key) {
+    } else if (_data->key.toLower() < _node->key_) {
         insert(_data, _node->lc);
     } else {
         _node->values.insert(_data);
@@ -22,10 +22,10 @@ void BST::insert(Data *_data, BSTNode*& _node) {
 
 BSTNode* BST::makeNode(Data *_data) {
     BSTNode* node = new BSTNode();
-    node->key = _data->key.toLower();
+    node->key_ = _data->key.toLower();
     node->values.insert(_data);
     size++;
-    qDebug() << size << node->key;
+    qDebug() << size << node->key_;
     return node;
 }
 
@@ -36,6 +36,6 @@ void BST::show() {
 void BST::show(BSTNode* _node) {
     if (_node == NULL) return;
     show(_node->lc);
-    qDebug() << _node->key << _node->values.size();
+    qDebug() << _node->key_ << _node->values.size();
     show(_node->rc);
 }

@@ -4,12 +4,10 @@
 #include "dataStructures/tree.h"
 
 
-struct TSTNode {
+struct TSTNode : public Node{
     QChar key;
-    bool isEnd = 1;
+    bool isEnd;
     TSTNode *lt, *eq, *gt;
-    LinkedList value;
-    QString key_;
 };
 
 class TST : public Tree

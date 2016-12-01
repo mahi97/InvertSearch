@@ -5,8 +5,9 @@
 
 
 
-struct TrieNode {
+struct TrieNode : public Node{
     QList<TrieNode*> c; //Children
+
 };
 
 class Trie : public Tree
