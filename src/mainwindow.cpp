@@ -3,6 +3,9 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
 
+
+    setFocus();
+
     search = new SearchThread(this);
     search->start(QThread::HighestPriority);
 
@@ -13,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     initWidget(terminal);
     addDockWidget(Qt::BottomDockWidgetArea, terminal);
 
-    monitor = new QTextEdit(this);
+    monitor = new Monitor(this);
     initWidget(monitor);
     setCentralWidget(monitor);
 
@@ -27,10 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
-    search->quit();
+    search->terminate();
+    search->wait();
 }
 
-void MainWindow::initWidget(QTextEdit *_monitor) {
+void MainWindow::initWidget(Monitor *_monitor) {
     _monitor->setMinimumSize(QSize(500, 500));
 }
 

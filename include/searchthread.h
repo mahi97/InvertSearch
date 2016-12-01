@@ -28,23 +28,26 @@ class SearchThread : public QThread
 
 public:
     SearchThread(QObject *parent);
+    ~SearchThread();
     bool doSearch{false};
 private:
     ETree treeEnum;
-    Tree* tree;
+    Tree* treeInvert;
+    Tree* treeForward;
     QStringList stopWord;
     QFile* file;
-    QStringList files;
+    QList<File*> files;
     void run();
     bool toShow{false};
-    void build(QByteArray _data, unsigned int _lineNum, QString _filename);
+    void buildInvert(const QByteArray &_data, unsigned int _lineNum, const QString &_filename);
+    void buildForward(const QByteArray &_data, const QString &_filename);
     Data* makeData(const QString& _word,
                   unsigned int _wordNum,
                   unsigned int _lineNum,
                   const QString& _file);
 public slots:
     void slt_chooseTree(ETree);
-    void slt_buildFile(QString);
+    void slt_buildFile(File*);
 
 signals:
     void sig_buildFinished();

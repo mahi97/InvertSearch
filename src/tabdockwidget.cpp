@@ -1,11 +1,14 @@
 #include "tabdockwidget.h"
 
+TabDockWidget* tabDock;
 
 TabDockWidget::TabDockWidget(QWidget *parent)
     : QDockWidget(parent) {
     w = new QWidget(this);
     QVBoxLayout *control = new QVBoxLayout(w);
-    fileViewer = new QListWidget(this);
+    fileViewer = new QListView(this);
+    model = new QStandardItemModel(this);
+    fileViewer->setModel(model);
     dataStructs << "-- Select a Tree --"
                 << "Binary Search Tree (BST)"
                 << "Ternary Search Tree (TST)"
@@ -19,12 +22,14 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     signalCounter = 0;
 
     // Conecctions
-    connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_open()) );
+    connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_browse()));
     connect(btnBuild , SIGNAL(clicked(bool)), this, SLOT(slt_build()));
     connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
     connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
-    connect(this, SIGNAL(sig_fileToBuild(QString)), search, SLOT(slt_buildFile(QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sig_fileToBuild(File*)), search, SLOT(slt_buildFile(File*)), Qt::QueuedConnection);
     connect(search, SIGNAL(sig_buildFinished()), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
+    connect(btnReset, SIGNAL(clicked(bool)), this, SLOT(slt_reset()));
+    connect(lineEditDirectory, SIGNAL(editingFinished()), this, SLOT(slt_textEdit()));
 }
 
 TabDockWidget::~TabDockWidget() {
@@ -39,6 +44,7 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
     btnHelp = new QPushButton("Help", this);
     btnReset = new QPushButton("Reset", this);
     lineEditDirectory = new QLineEdit(this);
+
     lineEditDirectory->setReadOnly(true);
     QHBoxLayout *browse = new QHBoxLayout;
     QHBoxLayout *btns = new QHBoxLayout;
@@ -62,50 +68,84 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
 
 /* SLOTS */
 
-void TabDockWidget::slt_open() {
-    qDebug() << "Open";
+void TabDockWidget::slt_browse() {
     QString tempDir;
     QFileDialog fd;
     tempDir = fd.getExistingDirectory(this,
                                       "Please choose a Folder",
                                       "",
                                       QFileDialog::ShowDirsOnly);
-    fd.setFocus();
     if (tempDir.size() >= 3) {
         directory = tempDir;
         lineEditDirectory->setText(tempDir);
+        slt_open();
     }
-
-    slt_update();
-
 }
 
-void TabDockWidget::slt_update() {
+void TabDockWidget::slt_textEdit() {
+    QFileInfo fi = QFileInfo(lineEditDirectory->text());
+    if (fi.exists() && fi.isDir()) {
+        directory = fi.absolutePath();
+        slt_open();
+    } else {
+        QMessageBox::warning(this,
+                             "Folder not Found",
+                             "Please enter a existing FOLDER name",
+                             QMessageBox::Ok);
+    }
+}
+
+void TabDockWidget::slt_open() {
+    qDebug() << "Open --> " << directory;
     files.clear();
     names.clear();
+    paths.clear();
+    model->clear();
     QDirIterator it(directory);
-    QStringList tempList;
     while (it.hasNext()) {
         QString temp = it.next();
         if (temp.endsWith(".txt")) {
-            QStringList ttemp;
-            ttemp = temp.split(QDir::separator());
-            files << temp;
-            names << ttemp.back();
+            slt_add(temp);
         }
     }
 
-    fileViewer->addItems(names);
+}
+
+void TabDockWidget::slt_add(QString _file) {
+
+    QStringList temp;
+    temp = _file.split(QDir::separator());
+    File* tFile = new File;
+    tFile->name = temp.back();
+    tFile->path = _file;
+    names.append(tFile->name);
+    paths.append(tFile->path);
+    files.append(tFile);
+    QStandardItem *item = new QStandardItem(temp.back());
+    model->appendRow(item);
+//    fileViewer->addItem(temp.back());
+}
+
+void TabDockWidget::slt_update(QString _file) {
+    File* tFile;
+    Q_FOREACH(File* file, files) {
+        if (file->path == _file) {
+            tFile = file;
+            break;
+        }
+    }
+
+    emit sig_fileToBuild(tFile);
+    signalCounter++;
 }
 
 void TabDockWidget::slt_build() {
     btnBuild->setEnabled(false);
     cmbDataStrct->setEnabled(false);
-    Q_FOREACH(QString file, files) {
+    Q_FOREACH(File* file, files) {
         emit sig_fileToBuild(file);
         signalCounter++;
     }
-
 }
 
 void TabDockWidget::slt_buildComplete() {
@@ -114,7 +154,6 @@ void TabDockWidget::slt_buildComplete() {
         btnBuild->setEnabled(true);
         cmbDataStrct->setEnabled(true);
     }
-
 }
 
 void TabDockWidget::slt_changeTree(QString _tree) {
@@ -129,5 +168,25 @@ void TabDockWidget::slt_changeTree(QString _tree) {
         emit sig_changeTree(ETree::Trie);
     else
         emit sig_changeTree(ETree::None);
+
+}
+
+void TabDockWidget::slt_del(QString _name) {
+    for(size_t i{}; i < files.size(); i++) {
+        if (_name == files[i]->name) {
+            for(size_t j{}; j < model->rowCount();j++) {
+                if (model->item(j)->text() == files[i]->name) {
+                    model->removeRow(j);
+                }
+            }
+            files.removeAt(i);
+            names.removeAt(i);
+            paths.removeAt(i);
+            break;
+        }
+    }
+}
+
+void TabDockWidget::slt_reset() {
 
 }

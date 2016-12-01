@@ -4,7 +4,7 @@ SearchThread *search;
 
 SearchThread::SearchThread(QObject* parent)
     : QThread(parent) {
-    tree = NULL;
+    treeInvert = NULL;
 
     QFile stop(":/stop");
     stop.open(QIODevice::ReadOnly);
@@ -37,18 +37,21 @@ SearchThread::SearchThread(QObject* parent)
 
 }
 
+SearchThread::~SearchThread() {
+    qDebug() << "Die";
+}
+
 void SearchThread::run() {
     while(true) {
         if (files.size()) {
-            file->setFileName(files.front());
+            file->setFileName(files.front()->path);
+            QString tName = files.front()->name;
             files.pop_front();
             file->open(QIODevice::ReadOnly);
             unsigned int lineNum{0};
             QByteArray in = file->readLine();
             while(!in.isNull()) {
-
-                QStringList temp = file->fileName().split(QDir::separator());
-                build(in, lineNum, temp.back());
+                buildInvert(in, lineNum, tName);
                 in = file->readLine();
             }
             emit sig_buildFinished();
@@ -58,25 +61,31 @@ void SearchThread::run() {
             qDebug() << ".";
             if (toShow) {
                 toShow = false;
-                tree->show();
+                treeInvert->show();
             }
             sleep(1);
         }
     }
-    //    exec();
+    exec();
 }
 
-void SearchThread::build(QByteArray _data,
+void SearchThread::buildInvert(const QByteArray& _data,
                          unsigned int _lineNum,
-                         QString _filename) {
+                         const QString& _filename) {
 
     QStringList temp = QString(_data).split(" ");
     for (size_t i{0}; i < temp.size(); i++) {
         if (!stopWord.contains(temp[i].toLower())
                 && !temp[i].isEmpty()) {
-            tree->insert(makeData(temp[i], i, _lineNum, _filename));
+            treeInvert->insert(makeData(temp[i], i, _lineNum, _filename));
         }
     }
+
+}
+
+void SearchThread::buildForward(const QByteArray &_data,
+                                const QString &_filename) {
+
 
 }
 
@@ -98,17 +107,17 @@ Data* SearchThread::makeData(const QString &_word,
 /* SLOTS */
 void SearchThread::slt_chooseTree(ETree _tree) {
     treeEnum = _tree;
-    if (tree != NULL)
-        delete tree;
+    if (treeInvert != NULL)
+        delete treeInvert;
     switch (treeEnum) {
     case ETree::BST:
-        tree = new BST();
+        treeInvert = new BST();
         break;
     case ETree::TST:
-        tree = new TST();
+        treeInvert = new TST();
         break;
     case ETree::Trie:
-        tree = new Trie();
+        treeInvert = new Trie();
         break;
     default:
         break;
@@ -116,7 +125,7 @@ void SearchThread::slt_chooseTree(ETree _tree) {
 
 }
 
-void SearchThread::slt_buildFile(QString _file) {
+void SearchThread::slt_buildFile(File *_file) {
     doSearch = true;
     files.append(_file);
 }

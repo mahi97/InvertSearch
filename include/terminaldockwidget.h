@@ -8,6 +8,7 @@
 
 #include "base.h"
 #include "terminal/ReplWidget.h"
+#include "tabdockwidget.h"
 
 class TerminalDockWidget : public QDockWidget
 {
@@ -28,6 +29,13 @@ public slots:
     void procces(QString);
 signals:
     void resualtReady(QString);
+    void sig_add(QString);
+    void sig_update(QString);
+    void sig_search();
+    void sig_list();
+    void sig_del(QString);
 };
+
+extern TerminalDockWidget* terminal;
 
 #endif // TERMINALDOCKWIDGET_H

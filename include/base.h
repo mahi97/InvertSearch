@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QList>
 #include <QMap>
+#include <QByteArray>
 
 
 // TODO : Add version control to base
@@ -31,5 +32,9 @@ struct Data {
     unsigned int wordNum;
 };
 
+struct File {
+    QString path;
+    QString name;
+};
 
 #endif // BASE_H

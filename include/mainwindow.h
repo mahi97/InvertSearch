@@ -8,6 +8,7 @@
 
 #include "tabdockwidget.h"
 #include "terminaldockwidget.h"
+#include "monitor.h"
 #include "base.h"
 #include "trees.h"
 #include "searchthread.h"
@@ -22,14 +23,9 @@ public:
     ~MainWindow();
 private:
 
-    void initWidget(QTextEdit* _monitor);
+    void initWidget(Monitor* _monitor);
     void initWidget(TabDockWidget* _tab);
     void initWidget(TerminalDockWidget *_terminal);
-
-    QTextEdit          *monitor;
-    TabDockWidget      *tabDock;
-    TerminalDockWidget *terminal;
-
 
 
 };
