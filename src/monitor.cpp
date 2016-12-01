@@ -2,6 +2,6 @@
 
 Monitor* monitor;
 
-Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
+Monitor::Monitor(QWidget *parent) : QPlainTextEdit(parent) {
 
 }

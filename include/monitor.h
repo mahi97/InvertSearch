@@ -2,9 +2,9 @@
 #define MONITOR_H
 
 #include "base.h"
-#include "QTextEdit"
+#include "QPlainTextEdit"
 
-class Monitor : public QTextEdit {
+class Monitor : public QPlainTextEdit {
 public:
     Monitor(QWidget* parent);
 private:

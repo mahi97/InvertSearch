@@ -12,7 +12,7 @@
 
 
 // TODO : Add version control to base
-#define REVNUM "0.03"
+#define REVNUM "nightly"
 
 
 #define Property(type,name,local) \

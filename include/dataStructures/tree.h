@@ -6,10 +6,10 @@
 
 
 
-struct Node {
-    QString key;
-    LinkedList values;
-};
+//struct Node {
+//    QString key;
+//    LinkedList values;
+//};
 
 class Tree
 {

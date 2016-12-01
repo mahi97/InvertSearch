@@ -80,7 +80,17 @@ void TerminalDockWidget::proccesDel(const QStringList & _cmds) {
 }
 
 void TerminalDockWidget::proccesUpdt(const QStringList & _cmds) {
-
+    if (_cmds.size()) {
+        QString name = _cmds[0] + ".txt";
+        if (tabDock->getNames().contains(name)) {
+            emit sig_update(name);
+            emit resualtReady(_cmds[0] + " Successfully Updated");
+        } else {
+            emit resualtReady("err : document not found.");
+        }
+    } else {
+        emit resualtReady("usage : update <document_name>");
+    }
 }
 
 void TerminalDockWidget::proccesList(const QStringList & _cmds) {

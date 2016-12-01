@@ -85,7 +85,7 @@ void TabDockWidget::slt_browse() {
 void TabDockWidget::slt_textEdit() {
     QFileInfo fi = QFileInfo(lineEditDirectory->text());
     if (fi.exists() && fi.isDir()) {
-        directory = fi.absolutePath();
+        directory = fi.absolutePath();\
         slt_open();
     } else {
         QMessageBox::warning(this,
@@ -123,13 +123,12 @@ void TabDockWidget::slt_add(QString _file) {
     files.append(tFile);
     QStandardItem *item = new QStandardItem(temp.back());
     model->appendRow(item);
-//    fileViewer->addItem(temp.back());
 }
 
-void TabDockWidget::slt_update(QString _file) {
+void TabDockWidget::slt_update(QString _name) {
     File* tFile;
     Q_FOREACH(File* file, files) {
-        if (file->path == _file) {
+        if (file->name == _name) {
             tFile = file;
             break;
         }

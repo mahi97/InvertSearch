@@ -2,7 +2,6 @@
 
 BST::BST() : Tree(){
     root = NULL;
-    size = 0;
 }
 
 void BST::insert(Data* _data) {

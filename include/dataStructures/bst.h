@@ -3,9 +3,12 @@
 
 #include "dataStructures/tree.h"
 
-struct BSTNode : Node{
+struct BSTNode {
     BSTNode* lc;
     BSTNode* rc;
+
+    QString key;
+    LinkedList values;
 };
 
 class BST : public Tree

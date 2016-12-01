@@ -1,7 +1,6 @@
 #include "dataStructures/tree.h"
 
-Tree::Tree()
-{
-
+Tree::Tree() {
+    size = 0;
 }
 

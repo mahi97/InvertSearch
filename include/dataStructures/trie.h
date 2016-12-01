@@ -5,7 +5,7 @@
 
 
 
-struct TrieNode : Node {
+struct TrieNode {
     QList<TrieNode*> c; //Children
 };
 
