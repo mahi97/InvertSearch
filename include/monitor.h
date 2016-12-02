@@ -1,13 +1,24 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 
-#include "base.h"
-#include "QPlainTextEdit"
+#include <QTextEdit>
+#include <QScrollBar>
 
-class Monitor : public QPlainTextEdit {
+#include "base.h"
+#include "searchthread.h"
+
+class Monitor : public QTextEdit {
+
+    Q_OBJECT
+
 public:
     Monitor(QWidget* parent);
+
 private:
+
+public slots:
+    void slt_summery(Summery*);
+
 };
 
 extern Monitor* monitor;

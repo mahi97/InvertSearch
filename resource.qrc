@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file alias="stop">StopWords.txt</file>
+        <file alias="logo.png">resource/ds_logo.png</file>
     </qresource>
 </RCC>

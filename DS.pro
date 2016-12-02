@@ -45,6 +45,7 @@ INCLUDEPATH += $$PWD/include
 OBJECTS_DIR = $$PWD/objs/
 MOC_DIR = $$PWD/objs/
 
+
 CONFIG += c++14
 
 RESOURCES += \

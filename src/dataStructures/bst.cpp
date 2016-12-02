@@ -2,6 +2,7 @@
 
 BST::BST() : Tree(){
     root = NULL;
+    name = "BST";
 }
 
 void BST::insert(Data* _data) {
@@ -30,11 +31,13 @@ BSTNode* BST::makeNode(Data *_data) {
 }
 
 void BST::show() {
+    wordsCount = 0;
     show(root);
 }
 
 void BST::show(BSTNode* _node) {
     if (_node == NULL) return;
+    wordsCount++;
     show(_node->lc);
     qDebug() << _node->key_ << _node->values.size();
     show(_node->rc);

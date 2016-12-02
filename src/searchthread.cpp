@@ -34,6 +34,9 @@ SearchThread::SearchThread(QObject* parent)
     qDebug() << this->thread();
 
     file = new QFile;
+    time = new QTime;
+    time->start();
+    m_filesCount = 0;
 
 }
 
@@ -44,6 +47,7 @@ SearchThread::~SearchThread() {
 void SearchThread::run() {
     while(true) {
         if (files.size()) {
+            m_filesCount++;
             file->setFileName(files.front()->path);
             QString tName = files.front()->name;
             files.pop_front();
@@ -62,7 +66,16 @@ void SearchThread::run() {
             if (toShow) {
                 toShow = false;
                 treeInvert->show();
+                Summery* summery = new Summery;
+                summery->treeName = treeInvert->getName();
+                summery->filesCount = m_filesCount;
+                summery->timeTakesToBuild = time->elapsed();
+                summery->treeSize = treeInvert->getSize();
+                summery->wordsCount = treeInvert->getWordsCount();
+                emit sig_summery(summery);
+                reset();
             }
+            time->restart();
             sleep(1);
         }
     }
@@ -128,4 +141,8 @@ void SearchThread::slt_chooseTree(ETree _tree) {
 void SearchThread::slt_buildFile(File *_file) {
     doSearch = true;
     files.append(_file);
+}
+
+void SearchThread::reset() {
+    m_filesCount = 0;
 }

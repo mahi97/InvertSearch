@@ -9,6 +9,7 @@
 #include <QList>
 #include <QMap>
 #include <QByteArray>
+#include <QTime>
 
 
 // TODO : Add version control to base
@@ -35,6 +36,14 @@ struct Data {
 struct File {
     QString path;
     QString name;
+};
+
+struct Summery {
+    QString treeName;
+    int treeSize;
+    int timeTakesToBuild;
+    int wordsCount;
+    int filesCount;
 };
 
 #endif // BASE_H

@@ -15,11 +15,6 @@ enum class ETree {
     Trie
 };
 
-struct BuildMaterial {
-    QString file;
-    QString name;
-};
-
 
 class SearchThread : public QThread
 {
@@ -37,6 +32,7 @@ private:
     QStringList stopWord;
     QFile* file;
     QList<File*> files;
+    QTime *time;
     void run();
     bool toShow{false};
     void buildInvert(const QByteArray &_data, unsigned int _lineNum, const QString &_filename);
@@ -45,12 +41,16 @@ private:
                   unsigned int _wordNum,
                   unsigned int _lineNum,
                   const QString& _file);
+    void reset();
+    int m_filesCount;
+
 public slots:
     void slt_chooseTree(ETree);
     void slt_buildFile(File*);
 
 signals:
     void sig_buildFinished();
+    void sig_summery(Summery*);
 };
 
 extern SearchThread* search;

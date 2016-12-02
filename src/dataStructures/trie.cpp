@@ -5,6 +5,8 @@ Trie::Trie() {
     root->c.clear();
     root->key = 'F';
     root->isEnd = false;
+    size++;
+    name = "Trie";
 }
 
 void Trie::insert(Data *_data) {
@@ -36,12 +38,14 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
 }
 
 void Trie::show() {
+    wordsCount = 0;
     show(root);
     qDebug() << size;
 }
 
 void Trie::show(TrieNode *_node) {
     if (_node->isEnd) {
+        wordsCount++;
         qDebug() << _node->key_ << _node->values.size();
     }
     Q_FOREACH(TrieNode* node, _node->c) {

@@ -2,6 +2,7 @@
 
 TST::TST() : Tree(){
     root = NULL;
+    name = "TST";
 }
 
 void TST::insert(Data *_data) {
@@ -39,6 +40,7 @@ TSTNode* TST::makeNode(Data* _data, size_t cursor) {
 }
 
 void TST::show() {
+    wordsCount = 0;
     show(root);
 }
 
@@ -46,6 +48,7 @@ void TST::show(TSTNode *_node) {
     if (_node == NULL) return;
     show(_node->lt);
     if (_node->isEnd) {
+        wordsCount++;
         qDebug() << _node->key_  << "FFF" << _node->values.size();
     }
     show(_node->eq);

@@ -24,7 +24,9 @@ public:
 
 private:
 
-    PropertyGet(qint64, Size, size);
+    PropertyGet(int, Size, size);
+    PropertyGet(int, WordsCount, wordsCount);
+    PropertyGet(QString, Name, name);
 };
 
 #endif // TREE_H

@@ -30,6 +30,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     connect(search, SIGNAL(sig_buildFinished()), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
     connect(btnReset, SIGNAL(clicked(bool)), this, SLOT(slt_reset()));
     connect(lineEditDirectory, SIGNAL(editingFinished()), this, SLOT(slt_textEdit()));
+    connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_reset()), Qt::QueuedConnection);
 }
 
 TabDockWidget::~TabDockWidget() {
@@ -187,5 +188,5 @@ void TabDockWidget::slt_del(QString _name) {
 }
 
 void TabDockWidget::slt_reset() {
-
+    qDebug() << "Gotcha";
 }
