@@ -6,8 +6,13 @@
 
 
 struct TrieNode : public Node{
-    QList<TrieNode*> c; //Children
+    TrieNode() : Node() {
+        isEnd = false;
+    }
 
+    QList<TrieNode*> c; //Children
+    QChar key;
+    bool isEnd;
 };
 
 class Trie : public Tree
@@ -20,6 +25,12 @@ public:
 //    virtual void del(size_t position);
 //    virtual void search(QString)     ;
 //    virtual void search(QStringList) ;
+
+private:
+    void insert(Data*_data, TrieNode *&_node, size_t cursor);
+    void show(TrieNode* _node);
+    TrieNode *makeNode(Data*_data, size_t cursor);
+    TrieNode* root;
 };
 
 #endif // TRIE_H
