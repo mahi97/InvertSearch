@@ -63,7 +63,8 @@ void SearchThread::run() {
             toShow = true;
         } else {
             qDebug() << ".";
-            if (toShow) {
+            if (treeInvert != NULL)
+            if (toShow || treeInvert->getBalanced()) {
                 toShow = false;
                 treeInvert->show();
                 Summery* summery = new Summery;
@@ -77,6 +78,7 @@ void SearchThread::run() {
             }
             time->restart();
             sleep(1);
+
         }
     }
     exec();
@@ -125,13 +127,21 @@ void SearchThread::slt_chooseTree(ETree _tree) {
     switch (treeEnum) {
     case ETree::BST:
         treeInvert = new BST();
+        treeInvert->setBalanced(false);
         break;
     case ETree::TST:
         treeInvert = new TST();
+        treeInvert->setBalanced(false);
         break;
     case ETree::Trie:
         treeInvert = new Trie();
         break;
+    case ETree::BalancedBST:
+        treeInvert = new BST();
+        treeInvert->setBalanced(true);
+    case ETree::BalancedTST:
+        treeInvert = new TST();
+        treeInvert->setBalanced(true);
     default:
         break;
     }
@@ -143,6 +153,26 @@ void SearchThread::slt_buildFile(File *_file) {
     files.append(_file);
 }
 
+void SearchThread::slt_showWords() {
+    qDebug() << "words";
+    showM(" -- Word List -- ", Qt::red);
+
+    Q_FOREACH(QString line, treeInvert->show()) {
+        showM("----->>", Qt::blue);
+        showM(line);
+        showM("<<-----", Qt::blue);
+
+    }
+
+    showM(" -- Word List END -- ", Qt::red);
+}
+
 void SearchThread::reset() {
     m_filesCount = 0;
+}
+
+void SearchThread::showM(QString _line, QColor _color) {
+    ShowMaterial* toShow = new ShowMaterial(_line, _color);
+    emit sig_show(toShow);
+
 }

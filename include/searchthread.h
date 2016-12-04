@@ -12,7 +12,9 @@ enum class ETree {
     None,
     BST,
     TST,
-    Trie
+    Trie,
+    BalancedBST,
+    BalancedTST
 };
 
 
@@ -43,14 +45,17 @@ private:
                   const QString& _file);
     void reset();
     int m_filesCount;
+    void showM(QString _line, QColor _color = Qt::black);
 
 public slots:
     void slt_chooseTree(ETree);
     void slt_buildFile(File*);
+    void slt_showWords();
 
 signals:
     void sig_buildFinished();
     void sig_summery(Summery*);
+    void sig_show(ShowMaterial*);
 };
 
 extern SearchThread* search;

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     initWidget(monitor);
     setCentralWidget(monitor);
 
+
     QLabel* lll = new QLabel("Hello Mahi :D", statusBar());
     statusBar()->addWidget(lll);
 

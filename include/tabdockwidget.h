@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QMessageBox>
 #include <QListView>
 #include <QApplication>
 #include <QFileInfo>

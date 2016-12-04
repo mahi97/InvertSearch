@@ -11,8 +11,16 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
             this, SLOT(slt_summery(Summery*)),
             Qt::QueuedConnection);
 
-    this->setFont(QFont("Monaco"));
+    connect(search,
+            SIGNAL(sig_show(ShowMaterial*)),
+            this,
+            SLOT(slt_show(ShowMaterial*)));
 
+
+    this->setFont(QFont("Monaco"));
+    this->defaultColor = Qt::black;
+
+    synHigh = new QSyntaxHighlighter(this);
 }
 
 void Monitor::slt_summery(Summery *_sum) {
@@ -29,4 +37,10 @@ void Monitor::slt_summery(Summery *_sum) {
     this->setTextColor(Qt::red);
     this->append(" -- BUILD SUMMERY ENDS --");
     this->verticalScrollBar()->setValue(this->verticalScrollBar()->maximum());
+}
+
+void Monitor::slt_show(ShowMaterial * _toShow) {
+    this->setTextColor(_toShow->color);
+    this->append(_toShow->line);
+    this->setTextColor(defaultColor);
 }

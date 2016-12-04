@@ -30,3 +30,18 @@ void LinkedList::insert(Data *_node) {
 size_t LinkedList::size() {
     return m_size;
 }
+
+QList<Data*> LinkedList::toQList() {
+    QList<Data*> tList;
+    if (first == NULL) return tList;
+    tList.append(first->data);
+    if (head == NULL) return tList;
+
+    Node* tNode = first;
+    for (size_t i{0}; i < m_size ; i++) {
+        if (tNode->next == NULL) break;
+        tList.append(tNode->next->data);
+        tNode = tNode->next;
+    }
+    return tList;
+}

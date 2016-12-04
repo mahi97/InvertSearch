@@ -39,18 +39,33 @@ TSTNode* TST::makeNode(Data* _data, size_t cursor) {
     return node;
 }
 
-void TST::show() {
+QStringList TST::show() {
     wordsCount = 0;
-    show(root);
+    QStringList tList;
+    return show(root, tList);
 }
 
-void TST::show(TSTNode *_node) {
-    if (_node == NULL) return;
-    show(_node->lt);
+QStringList TST::show(TSTNode *_node, QStringList& _list) {
+    if (_node == NULL) return _list;
+    show(_node->lt, _list);
+
     if (_node->isEnd) {
         wordsCount++;
-        qDebug() << _node->key_  << "FFF" << _node->values.size();
+        QStringList buffer;
+        QString files;
+        Q_FOREACH(Data* data, _node->values.toQList()) {
+            if (!buffer.contains(data->file)) {
+                files.append(data->file);
+                files.append(", ");
+                buffer.append(data->file);
+            }
+        }
+        files.chop(1);
+        files = QString("|%1 -> ").arg(_node->key_) + files;
+        _list.append(files);
     }
-    show(_node->eq);
-    show(_node->gt);
+    show(_node->eq, _list);
+    show(_node->gt, _list);
+
+    return _list;
 }

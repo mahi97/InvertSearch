@@ -12,7 +12,10 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     dataStructs << "-- Select a Tree --"
                 << "Binary Search Tree (BST)"
                 << "Ternary Search Tree (TST)"
-                << "Trie";
+                << "Trie"
+                << "Balanced BST"
+                << "Balanced TST";
+
 
     fillLayout(control);
 
@@ -45,8 +48,6 @@ void TabDockWidget::fillLayout(QVBoxLayout *_layout) {
     btnHelp = new QPushButton("Help", this);
     btnReset = new QPushButton("Reset", this);
     lineEditDirectory = new QLineEdit(this);
-
-    lineEditDirectory->setReadOnly(true);
     QHBoxLayout *browse = new QHBoxLayout;
     QHBoxLayout *btns = new QHBoxLayout;
     browse->addWidget(lineEditDirectory);
@@ -80,13 +81,18 @@ void TabDockWidget::slt_browse() {
         directory = tempDir;
         lineEditDirectory->setText(tempDir);
         slt_open();
+        slt_changeTree(cmbDataStrct->currentText());
     }
 }
 
 void TabDockWidget::slt_textEdit() {
-    QFileInfo fi = QFileInfo(lineEditDirectory->text());
+
+    QString text = lineEditDirectory->text();
+    text = text + ((text.endsWith("/")) ? "" : "/");
+    QFileInfo fi = QFileInfo(text);
     if (fi.exists() && fi.isDir()) {
-        directory = fi.absolutePath();\
+        qDebug() << fi.path();
+        directory = fi.path();
         slt_open();
     } else {
         QMessageBox::warning(this,
@@ -123,6 +129,7 @@ void TabDockWidget::slt_add(QString _file) {
     paths.append(tFile->path);
     files.append(tFile);
     QStandardItem *item = new QStandardItem(temp.back());
+    item->setEditable(false);
     model->appendRow(item);
 }
 
@@ -140,6 +147,21 @@ void TabDockWidget::slt_update(QString _name) {
 }
 
 void TabDockWidget::slt_build() {
+    if (files.isEmpty()) {
+        QMessageBox::critical(this,
+                             "Can't Build",
+                             "There's no file to build",
+                             QMessageBox::Ok);
+        return;
+    }
+
+    if (cmbDataStrct->currentIndex() == 0) {
+        QMessageBox::critical(this,
+                             "Can't Build",
+                             "You Should Select a Tree First.",
+                             QMessageBox::Ok);
+        return;
+    }
     btnBuild->setEnabled(false);
     cmbDataStrct->setEnabled(false);
     Q_FOREACH(File* file, files) {
@@ -166,6 +188,10 @@ void TabDockWidget::slt_changeTree(QString _tree) {
         emit sig_changeTree(ETree::TST);
     else if(_tree == dataStructs[3])
         emit sig_changeTree(ETree::Trie);
+    else if (_tree == dataStructs[4])
+        emit sig_changeTree(ETree::BalancedBST);
+    else if (_tree == dataStructs[5])
+        emit sig_changeTree(ETree::BalancedTST);
     else
         emit sig_changeTree(ETree::None);
 

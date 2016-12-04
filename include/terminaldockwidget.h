@@ -9,6 +9,7 @@
 #include "base.h"
 #include "terminal/ReplWidget.h"
 #include "tabdockwidget.h"
+#include "monitor.h"
 
 class TerminalDockWidget : public QDockWidget
 {
@@ -34,6 +35,7 @@ signals:
     void sig_search();
     void sig_list();
     void sig_del(QString);
+    void sig_showWords();
 };
 
 extern TerminalDockWidget* terminal;

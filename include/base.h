@@ -10,7 +10,7 @@
 #include <QMap>
 #include <QByteArray>
 #include <QTime>
-
+#include <QColor>
 
 // TODO : Add version control to base
 #define REVNUM "nightly"
@@ -44,6 +44,23 @@ struct Summery {
     int timeTakesToBuild;
     int wordsCount;
     int filesCount;
+};
+
+struct ShowMaterial {
+
+    ShowMaterial() {
+        line = "";
+        color = Qt::black;
+    }
+
+    ShowMaterial(QString _line, QColor _color)
+        : line(_line),
+          color(_color) {
+
+    }
+
+    QString line;
+    QColor color;
 };
 
 #endif // BASE_H

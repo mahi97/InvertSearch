@@ -16,6 +16,10 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
             tabDock, SLOT(slt_add(QString)));
     connect(this, SIGNAL(sig_del(QString)),
             tabDock, SLOT(slt_del(QString)));
+    connect(this, SIGNAL(sig_showWords()),
+            search, SLOT(slt_showWords()),
+            Qt::QueuedConnection);
+
 }
 
 void TerminalDockWidget::procces(QString _commad) {
@@ -35,6 +39,8 @@ void TerminalDockWidget::procces(QString _commad) {
             proccesList(comList);
         } else if (cmd == "search") {
             proccesSrch(comList);
+        } else if (cmd == "exit") {
+            qApp->exit();
         } else {
             emit resualtReady("err : command not found  ->  " + _commad);
         }
@@ -94,7 +100,69 @@ void TerminalDockWidget::proccesUpdt(const QStringList & _cmds) {
 }
 
 void TerminalDockWidget::proccesList(const QStringList & _cmds) {
+    if (_cmds.size()) {
+        if (_cmds[0].startsWith("-")) {
+            qDebug() << _cmds[0];
+            if (_cmds[0] == "-w") {
+                emit resualtReady("Word will be shown.");
+                emit sig_showWords();
 
+            } else if (_cmds[0] == "-l") {
+                emit resualtReady("Files in List will be shown.");
+                monitor->setTextColor(Qt::red);
+                monitor->append(" -- Files That Listed --");
+                QStringList buffer;
+                Q_FOREACH(QString file, tabDock->getNames()) {
+                    monitor->setTextColor(Qt::black);
+                    if (file.endsWith(".txt"))
+                    buffer.append(file);
+                    if (buffer.size() > 5) {
+                        monitor->append(QString("%1, %2, %3, %4, %5, %6")
+                                        .arg(buffer[0])
+                                .arg(buffer[1])
+                                .arg(buffer[2])
+                                .arg(buffer[3])
+                                .arg(buffer[4])
+                                .arg(buffer[5]));
+                        buffer.clear();
+                    }
+                }
+                monitor->setTextColor(Qt::red);
+                monitor->append(" -- Files That Listed END --");
+
+
+            } else if (_cmds[0] == "-f") {
+                emit resualtReady("File in Directory will be shown");
+                QDir dir(tabDock->getDirectory());
+                QStringList buffer;
+                monitor->setTextColor(Qt::red);
+                monitor->append(" -- Files That in Directory --");
+                Q_FOREACH(QString file, dir.entryList()) {
+                    monitor->setTextColor(Qt::black);
+                    if (file.endsWith(".txt"))
+                    buffer.append(file);
+                    if (buffer.size() > 5) {
+                        monitor->append(QString("%1, %2, %3, %4, %5, %6")
+                                        .arg(buffer[0])
+                                .arg(buffer[1])
+                                .arg(buffer[2])
+                                .arg(buffer[3])
+                                .arg(buffer[4])
+                                .arg(buffer[5]));
+                        buffer.clear();
+                    }
+                }
+                monitor->setTextColor(Qt::red);
+                monitor->append(" -- Files in Directory END --");
+
+
+            } else {
+                emit resualtReady("usage : list [-f -w -l]");
+            }
+        } else {
+            emit resualtReady("usage : list [-f -w -l]");
+        }
+    }
 }
 
 void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {

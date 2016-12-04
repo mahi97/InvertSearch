@@ -15,14 +15,14 @@ class BST : public Tree
 public:
     BST();
     virtual void insert(Data*);
-    void show();
+    QStringList show();
 //    virtual void del(size_t position);
 //    virtual void search(QString);
 //    virtual void search(QStringList);
 
 private:
     void insert(Data *_data, BSTNode *&_node);
-    void show(BSTNode*);
+    QStringList show(BSTNode*, QStringList &_list);
     BSTNode* makeNode(Data*);
     BSTNode* root;
 };

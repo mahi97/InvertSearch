@@ -30,15 +30,32 @@ BSTNode* BST::makeNode(Data *_data) {
     return node;
 }
 
-void BST::show() {
+QStringList BST::show() {
     wordsCount = 0;
-    show(root);
+    QStringList tlist;
+    return show(root, tlist);
 }
 
-void BST::show(BSTNode* _node) {
-    if (_node == NULL) return;
+QStringList BST::show(BSTNode* _node, QStringList& _list) {
+    if (_node == NULL) return _list;
+    QString tStr;
+    QString files;
     wordsCount++;
-    show(_node->lc);
+    show(_node->lc, _list);
+
+    QStringList buffer;
+    Q_FOREACH(Data* data, _node->values.toQList()) {
+        if (!buffer.contains(data->file)) {
+            files.append(data->file);
+            files.append(", ");
+            buffer.append(data->file);
+        }
+    }
+    files.chop(1);
+    tStr = QString ("|%1 -> ").arg(_node->key_) + files;
+    _list.append(tStr);
     qDebug() << _node->key_ << _node->values.size();
-    show(_node->rc);
+
+    show(_node->rc, _list);
+    return _list;
 }

@@ -19,6 +19,7 @@ public:
     Node* pop();
     Node* at(int _index);
     size_t size();
+    QList<Data*> toQList();
 
 private:
     size_t m_size;

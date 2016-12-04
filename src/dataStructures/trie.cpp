@@ -37,7 +37,7 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
 
 }
 
-void Trie::show() {
+QStringList Trie::show() {
     wordsCount = 0;
     show(root);
     qDebug() << size;
