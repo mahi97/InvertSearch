@@ -34,6 +34,7 @@ private:
     QStringList stopWord;
     QFile* file;
     QList<File*> files;
+    QStringList words;
     QTime *time;
     void run();
     bool toShow{false};
@@ -51,11 +52,13 @@ public slots:
     void slt_chooseTree(ETree);
     void slt_buildFile(File*);
     void slt_showWords();
+    void slt_search(QString _search);
 
 signals:
     void sig_buildFinished();
     void sig_summery(Summery*);
     void sig_show(ShowMaterial*);
+    void sig_searchFinished();
 };
 
 extern SearchThread* search;

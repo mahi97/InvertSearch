@@ -23,7 +23,7 @@ public:
     virtual void insert(Data*)       ;
     virtual QStringList show();
 //    virtual void del(size_t position);
-//    virtual void search(QString)     ;
+    virtual LinkedList search(QString)     ;
 //    virtual void search(QStringList) ;
 
 private:

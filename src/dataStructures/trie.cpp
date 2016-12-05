@@ -43,6 +43,10 @@ QStringList Trie::show() {
     qDebug() << size;
 }
 
+LinkedList Trie::search(QString) {
+
+}
+
 void Trie::show(TrieNode *_node) {
     if (_node->isEnd) {
         wordsCount++;

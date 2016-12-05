@@ -3,7 +3,6 @@
 
 #include <QTextEdit>
 #include <QScrollBar>
-#include <QSyntaxHighlighter>
 
 #include "base.h"
 #include "searchthread.h"
@@ -17,7 +16,6 @@ public:
 
 private:
     QColor defaultColor;
-    QSyntaxHighlighter* synHigh;
 public slots:
     void slt_summery(Summery*);
     void slt_show(ShowMaterial*);

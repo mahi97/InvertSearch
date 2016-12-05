@@ -57,12 +57,23 @@ void SearchThread::run() {
             while(!in.isNull()) {
                 buildInvert(in, lineNum, tName);
                 in = file->readLine();
+                lineNum++;
             }
             emit sig_buildFinished();
             file->close();
             toShow = true;
+        } else if (words.size()) {
+            QString _search = words.front();
+            words.pop_front();
+            LinkedList list = treeInvert->search(_search);
+            showM("|-> " + _search, Qt::green);
+            Q_FOREACH(Data* data, list.toQList()) {
+
+                showM(QString("F : %1, L : %2, W : %3").arg(data->file)
+                      .arg(data->lineNum).arg(data->wordNum));
+            }
+            emit sig_searchFinished();
         } else {
-            qDebug() << ".";
             if (treeInvert != NULL)
             if (toShow || treeInvert->getBalanced()) {
                 toShow = false;
@@ -165,6 +176,13 @@ void SearchThread::slt_showWords() {
     }
 
     showM(" -- Word List END -- ", Qt::red);
+}
+
+void SearchThread::slt_search(QString _search) {
+    qDebug() << "haha";
+    showM(_search + " <-- Done.", Qt::cyan);
+    words.append(_search);
+
 }
 
 void SearchThread::reset() {

@@ -26,8 +26,11 @@ private:
     void proccesList  (const QStringList &);
     void proccesSrch  (const QStringList &);
 
+    int wordsToSearch;
+
 public slots:
     void procces(QString);
+    void slt_searchFinished();
 signals:
     void resualtReady(QString);
     void sig_add(QString);
@@ -36,6 +39,7 @@ signals:
     void sig_list();
     void sig_del(QString);
     void sig_showWords();
+    void sig_searchWord(QString);
 };
 
 extern TerminalDockWidget* terminal;

@@ -45,6 +45,10 @@ QStringList TST::show() {
     return show(root, tList);
 }
 
+LinkedList TST::search(QString) {
+
+}
+
 QStringList TST::show(TSTNode *_node, QStringList& _list) {
     if (_node == NULL) return _list;
     show(_node->lt, _list);

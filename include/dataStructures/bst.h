@@ -17,13 +17,14 @@ public:
     virtual void insert(Data*);
     QStringList show();
 //    virtual void del(size_t position);
-//    virtual void search(QString);
+    virtual LinkedList search(QString);
 //    virtual void search(QStringList);
 
 private:
     void insert(Data *_data, BSTNode *&_node);
     QStringList show(BSTNode*, QStringList &_list);
     BSTNode* makeNode(Data*);
+    void search(QString _word, LinkedList&_list, BSTNode*_node);
     BSTNode* root;
 };
 

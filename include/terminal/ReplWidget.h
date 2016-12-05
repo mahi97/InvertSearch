@@ -8,6 +8,7 @@
 #include <QTextDocumentFragment>
 #include <QStack>
 #include <QPalette>
+#include <QDebug>
 
 class ReplWidget : public QPlainTextEdit
 {

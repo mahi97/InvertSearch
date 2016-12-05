@@ -31,6 +31,7 @@ struct Data {
     QString file;
     unsigned int lineNum;
     unsigned int wordNum;
+
 };
 
 struct File {

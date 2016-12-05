@@ -8,6 +8,8 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
     repl = new ReplWidget(this);
     setWidget(repl);
 
+    wordsToSearch = 0;
+
     connect(repl, SIGNAL(command(QString)),
             this, SLOT(procces(QString)));
     connect(this, SIGNAL(resualtReady(QString)),
@@ -18,6 +20,12 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
             tabDock, SLOT(slt_del(QString)));
     connect(this, SIGNAL(sig_showWords()),
             search, SLOT(slt_showWords()),
+            Qt::QueuedConnection);
+    connect(this, SIGNAL(sig_searchWord(QString)),
+            search, SLOT(slt_search(QString)),
+            Qt::QueuedConnection);
+    connect(search, SIGNAL(sig_searchFinished()),
+            this, SLOT(slt_searchFinished()),
             Qt::QueuedConnection);
 
 }
@@ -48,6 +56,16 @@ void TerminalDockWidget::procces(QString _commad) {
     }
     emit resualtReady("err : command not found!!!");
 
+}
+
+void TerminalDockWidget::slt_searchFinished() {
+    qDebug() << "hoohoho" << wordsToSearch;
+    wordsToSearch--;
+    if (wordsToSearch == 0) {
+        monitor->setTextColor(Qt::red);
+        monitor->append(" -- SEARCH END -- ");
+        monitor->setTextColor(Qt::black);
+    }
 }
 
 void TerminalDockWidget::proccesAdd(const QStringList & _cmds) {
@@ -166,5 +184,42 @@ void TerminalDockWidget::proccesList(const QStringList & _cmds) {
 }
 
 void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
+    if (_cmds.size() > 1) {
+        if (_cmds[0] == "-w") {
+            if (_cmds[1].startsWith("\"") && _cmds[1].endsWith("\"")) {
+                QString word = _cmds[1];
+                word.chop(1);
+                word.remove(0, 1);
+                qDebug() << word;
+                wordsToSearch++;
+                emit sig_searchWord(word);
+                emit resualtReady("Start Searching for : " + word);
+                monitor->setTextColor(Qt::red);
+                monitor->append(" -- SEARCH START -- ");
+                monitor->setTextColor(Qt::black);
 
+
+            } else {
+                emit resualtReady("err : put word between `\"` ");
+            }
+        } else if (_cmds[0] == "-s") {
+            QString words = _cmds[1];
+            words.chop(1);
+            words.remove(0, 1);
+            Q_FOREACH(QString word, words.split(" ")) {
+                emit sig_searchWord(word);
+                wordsToSearch++;
+            }
+            emit resualtReady("Start Searching for Words ... ");
+            monitor->setTextColor(Qt::red);
+            monitor->append(" -- SEARCH START -- ");
+            monitor->setTextColor(Qt::black);
+        } else {
+            emit resualtReady("usage : search -w \"word_to_search\"");
+            emit resualtReady("      : search -s \"words_to_search_sperated_by_space\"");
+        }
+    } else {
+        emit resualtReady("usage : search -w \"word_to_search\"");
+        emit resualtReady("      : search -s \"words_to_search_sperated_by_space\"");
+    }
 }

@@ -20,7 +20,6 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
     this->setFont(QFont("Monaco"));
     this->defaultColor = Qt::black;
 
-    synHigh = new QSyntaxHighlighter(this);
 }
 
 void Monitor::slt_summery(Summery *_sum) {
