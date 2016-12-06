@@ -7,6 +7,7 @@ Trie::Trie() {
     root->isEnd = false;
     size++;
     name = "Trie";
+    balanced = false;
 }
 
 void Trie::insert(Data *_data) {
@@ -39,23 +40,60 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
 
 QStringList Trie::show() {
     wordsCount = 0;
-    show(root);
+    QStringList list;
+    return show(root, list);
     qDebug() << size;
 }
 
-LinkedList Trie::search(QString) {
-
+LinkedList Trie::search(QString _word) {
+    LinkedList list;
+    search(_word, 0, list, root);
+    return list;
 }
 
-void Trie::show(TrieNode *_node) {
+void Trie::search(QString _word,
+                  int _index,
+                  LinkedList & _list,
+                  TrieNode *_node) {
+    if (_node == NULL || _index > _word.size()) return;
+
+    if (_word == _node->key_) {
+        _list = _node->values;
+        qDebug() << "FF" << _node->values.toQList().size();
+        return;
+    } else {
+        Q_FOREACH(TrieNode* c, _node->c) {
+            if (c->key == _word[_index]) {
+
+                search(_word, ++_index, _list, c);
+                break;
+            }
+        }
+    }
+}
+
+QStringList Trie::show(TrieNode *_node, QStringList& _list) {
+    if (_node == NULL) return _list;
+
     if (_node->isEnd) {
         wordsCount++;
-        qDebug() << _node->key_ << _node->values.size();
+        QStringList buffer;
+        QString files;
+        Q_FOREACH(Data* data, _node->values.toQList()) {
+            if (!buffer.contains(data->file)) {
+                files.append(data->file);
+                files.append(", ");
+                buffer.append(data->file);
+            }
+        }
+        files.chop(1);
+        files = QString("|%1 -> ").arg(_node->key_) + files;
+        _list.append(files);
     }
     Q_FOREACH(TrieNode* node, _node->c) {
-        show(node);
+        show(node, _list);
     }
-
+    return _list;
 }
 
 TrieNode* Trie::makeNode(Data * _data, size_t cursor) {

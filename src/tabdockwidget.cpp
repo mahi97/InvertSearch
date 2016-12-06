@@ -23,6 +23,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     setWidget(w);
 
     signalCounter = 0;
+    search->directory = &directory;
 
     // Conecctions
     connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_browse()));

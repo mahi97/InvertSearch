@@ -13,7 +13,7 @@ class Monitor : public QTextEdit {
 
 public:
     Monitor(QWidget* parent);
-
+    ~Monitor();
 private:
     QColor defaultColor;
 public slots:

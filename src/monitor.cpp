@@ -22,6 +22,14 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
 
 }
 
+Monitor::~Monitor() {
+    QFile file("../../../output.html");
+    file.open(QIODevice::WriteOnly);
+    file.write(this->toHtml().toLatin1());
+    file.close();
+}
+
+
 void Monitor::slt_summery(Summery *_sum) {
     qDebug() << "DDDDD";
     this->setTextColor(Qt::red);
@@ -42,4 +50,6 @@ void Monitor::slt_show(ShowMaterial * _toShow) {
     this->setTextColor(_toShow->color);
     this->append(_toShow->line);
     this->setTextColor(defaultColor);
+    this->verticalScrollBar()->setValue(this->verticalScrollBar()->maximum());
+
 }

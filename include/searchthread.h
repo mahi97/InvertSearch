@@ -27,6 +27,7 @@ public:
     SearchThread(QObject *parent);
     ~SearchThread();
     bool doSearch{false};
+    QString* directory;
 private:
     ETree treeEnum;
     Tree* treeInvert;

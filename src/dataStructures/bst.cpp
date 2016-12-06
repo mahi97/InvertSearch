@@ -35,11 +35,12 @@ void BST::search(QString _word, LinkedList &_list, BSTNode *_node) {
     if (_word == _node->key_) {
         _list = _node->values;
         return;
+    } else if (_word < _node->key_) {
+        search(_word, _list, _node->lc);
+    } else {
+        search(_word, _list, _node->rc);
     }
-    search(_word, _list, _node->lc);
-    search(_word, _list, _node->rc);
 }
-
 QStringList BST::show() {
     wordsCount = 0;
     QStringList tlist;

@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+
     search->terminate();
     search->wait();
 }
