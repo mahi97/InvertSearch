@@ -23,11 +23,11 @@ public:
     virtual void insert(Data*)       ;
     virtual QStringList show();
 //    virtual void del(size_t position);
-    virtual LinkedList search(QString)     ;
+    virtual LinkedList* search(QString)     ;
 //    virtual void search(QStringList) ;
 
 private:
-    void search(QString, int, LinkedList&, TrieNode*);
+    void search(QString, int, LinkedList *&, TrieNode*);
     void insert(Data*_data, TrieNode *&_node, size_t cursor);
     QStringList show(TrieNode* _node, QStringList &_list);
     TrieNode *makeNode(Data*_data, size_t cursor);

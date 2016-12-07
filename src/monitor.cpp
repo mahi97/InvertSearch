@@ -14,7 +14,14 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
     connect(search,
             SIGNAL(sig_show(ShowMaterial*)),
             this,
-            SLOT(slt_show(ShowMaterial*)));
+            SLOT(slt_show(ShowMaterial*)),
+            Qt::QueuedConnection);
+
+    connect(search,
+            SIGNAL(sig_searchFinished(LinkedList*)),
+            this,
+            SLOT(slt_search(LinkedList*)),
+            Qt::QueuedConnection);
 
 
     this->setFont(QFont("Monaco"));
@@ -52,4 +59,8 @@ void Monitor::slt_show(ShowMaterial * _toShow) {
     this->setTextColor(defaultColor);
     this->verticalScrollBar()->setValue(this->verticalScrollBar()->maximum());
 
+}
+
+void Monitor::slt_search(LinkedList *_list) {
+    qDebug() << "Fun ";
 }

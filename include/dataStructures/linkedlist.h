@@ -15,11 +15,13 @@ public:
     LinkedList();
 
     void insert(Data* _node);
+    void append(LinkedList* _llist);
     void remove();
     Node* pop();
     Node* at(int _index);
     size_t size();
     QList<Data*> toQList();
+    LinkedList::Node* getFirst() const;
 
 private:
     size_t m_size;

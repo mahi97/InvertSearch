@@ -27,6 +27,19 @@ void LinkedList::insert(Data *_node) {
     m_size++;
 }
 
+void LinkedList::append(LinkedList *_llist) {
+    size_t size = _llist->size();
+    if (size) {
+        head->next = _llist->getFirst();
+        m_size++;
+        while (size) {
+            head = head->next;
+            size--;
+            m_size++;
+        }
+    }
+}
+
 size_t LinkedList::size() {
     return m_size;
 }
@@ -44,4 +57,8 @@ QList<Data*> LinkedList::toQList() {
         tNode = tNode->next;
     }
     return tList;
+}
+
+LinkedList::Node* LinkedList::getFirst() const {
+    return first;
 }

@@ -45,20 +45,20 @@ QStringList Trie::show() {
     qDebug() << size;
 }
 
-LinkedList Trie::search(QString _word) {
-    LinkedList list;
+LinkedList* Trie::search(QString _word) {
+    LinkedList* list = new LinkedList;
     search(_word, 0, list, root);
     return list;
 }
 
 void Trie::search(QString _word,
                   int _index,
-                  LinkedList & _list,
+                  LinkedList* & _list,
                   TrieNode *_node) {
     if (_node == NULL || _index > _word.size()) return;
 
     if (_word == _node->key_) {
-        _list = _node->values;
+        _list = &_node->values;
         return;
     } else {
         Q_FOREACH(TrieNode* c, _node->c) {

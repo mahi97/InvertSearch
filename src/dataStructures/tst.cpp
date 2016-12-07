@@ -45,17 +45,17 @@ QStringList TST::show() {
     return show(root, tList);
 }
 
-LinkedList TST::search(QString _word) {
-    LinkedList list;
+LinkedList* TST::search(QString _word) {
+    LinkedList* list = new LinkedList;
         search(_word, 0, list, root);
     return list;
 }
 
-void TST::search(QString _word,int _index , LinkedList &_list, TSTNode*_node) {
+void TST::search(QString _word,int _index , LinkedList* &_list, TSTNode*_node) {
     if (_node == NULL || _index >= _word.size()) return;
 
     if (_word == _node->key_) {
-        _list = _node->values;
+        _list = &_node->values;
         return;
     } else if (_word[_index] < _node->key) {
         search(_word, _index, _list, _node->lt);

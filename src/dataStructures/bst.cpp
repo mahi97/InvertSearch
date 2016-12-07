@@ -30,10 +30,10 @@ BSTNode* BST::makeNode(Data *_data) {
     return node;
 }
 
-void BST::search(QString _word, LinkedList &_list, BSTNode *_node) {
+void BST::search(QString _word, LinkedList* &_list, BSTNode *_node) {
     if (_node == NULL) return;
     if (_word == _node->key_) {
-        _list = _node->values;
+        _list = &_node->values;
         return;
     } else if (_word < _node->key_) {
         search(_word, _list, _node->lc);
@@ -47,8 +47,8 @@ QStringList BST::show() {
     return show(root, tlist);
 }
 
-LinkedList BST::search(QString _word) {
-    LinkedList list;
+LinkedList* BST::search(QString _word) {
+    LinkedList* list = new LinkedList;
     search(_word, list, root);
     return list;
 }

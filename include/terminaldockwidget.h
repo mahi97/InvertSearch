@@ -30,7 +30,7 @@ private:
 
 public slots:
     void procces(QString);
-    void slt_searchFinished();
+    void slt_searchFinished(LinkedList *);
 signals:
     void resualtReady(QString);
     void sig_add(QString);

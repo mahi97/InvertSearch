@@ -24,8 +24,8 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
     connect(this, SIGNAL(sig_searchWord(QString)),
             search, SLOT(slt_search(QString)),
             Qt::QueuedConnection);
-    connect(search, SIGNAL(sig_searchFinished()),
-            this, SLOT(slt_searchFinished()),
+    connect(search, SIGNAL(sig_searchFinished(LinkedList*)),
+            this, SLOT(slt_searchFinished(LinkedList*)),
             Qt::QueuedConnection);
 
 }
@@ -58,8 +58,7 @@ void TerminalDockWidget::procces(QString _commad) {
 
 }
 
-void TerminalDockWidget::slt_searchFinished() {
-    qDebug() << "hoohoho" << wordsToSearch;
+void TerminalDockWidget::slt_searchFinished(LinkedList*) {
     wordsToSearch--;
     if (wordsToSearch == 0) {
         monitor->setTextColor(Qt::red);
@@ -203,13 +202,16 @@ void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
                 emit resualtReady("err : put word between `\"` ");
             }
         } else if (_cmds[0] == "-s") {
-            QString words = _cmds[1];
-            words.chop(1);
-            words.remove(0, 1);
-            Q_FOREACH(QString word, words.split(" ")) {
-                emit sig_searchWord(word);
+            QStringList cmds = _cmds;
+            cmds.pop_front();
+
+            for(int i{};i < cmds.size();i++) {
+                if (i == 0) cmds[i].remove(0, 1);
+                if (i == cmds.size() - 1) cmds[i].chop(1);
+                emit sig_searchWord(cmds[i]);
                 wordsToSearch++;
             }
+
             emit resualtReady("Start Searching for Words ... ");
             monitor->setTextColor(Qt::red);
             monitor->append(" -- SEARCH START -- ");

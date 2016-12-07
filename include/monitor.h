@@ -19,6 +19,7 @@ private:
 public slots:
     void slt_summery(Summery*);
     void slt_show(ShowMaterial*);
+    void slt_search(LinkedList*);
 };
 
 extern Monitor* monitor;

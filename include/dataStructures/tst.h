@@ -19,14 +19,14 @@ public:
     virtual void insert(Data*)       ;
     virtual QStringList show();
 //    virtual void del(size_t position);
-    virtual LinkedList search(QString)     ;
+    virtual LinkedList* search(QString)     ;
 //    virtual void search(QStringList) ;
 
 private:
     void insert(Data *, TSTNode*&, size_t cursor);
     QStringList show(TSTNode* _node, QStringList &_list);
     TSTNode* makeNode(Data* _data, size_t cursor);
-    void search(QString, int, LinkedList &, TSTNode*);
+    void search(QString, int, LinkedList* &, TSTNode*);
 
     TSTNode* root;
 

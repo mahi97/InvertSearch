@@ -64,15 +64,25 @@ void SearchThread::run() {
             toShow = true;
         } else if (words.size()) {
             QString _search = words.front();
+            LinkedList* list = treeInvert->search(_search);
             words.pop_front();
-            LinkedList list = treeInvert->search(_search);
-            showM("|-> " + _search, Qt::green);
-            Q_FOREACH(Data* data, list.toQList()) {
+            while (words.size()) {
+                _search = words.front();
+                words.pop_front();
 
-                showM(QString("F : %1, L : %2, W : %3").arg(data->file)
-                      .arg(data->lineNum).arg(data->wordNum));
+                list->append(treeInvert->search(_search));
             }
-            emit sig_searchFinished();
+            showM("|-> " + _search, Qt::green);
+            Q_FOREACH(Data* data, list->toQList()) {
+
+                showM(QString("F : %1, L : %2, W : %3, K : %4")
+                      .arg(data->file)
+                      .arg(data->lineNum)
+                      .arg(data->wordNum)
+                      .arg(data->key));
+            }
+
+            emit sig_searchFinished(list);
         } else {
             if (treeInvert != NULL)
             if (toShow || treeInvert->getBalanced()) {

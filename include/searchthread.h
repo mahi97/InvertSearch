@@ -59,7 +59,7 @@ signals:
     void sig_buildFinished();
     void sig_summery(Summery*);
     void sig_show(ShowMaterial*);
-    void sig_searchFinished();
+    void sig_searchFinished(LinkedList*);
 };
 
 extern SearchThread* search;
