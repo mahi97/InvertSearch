@@ -76,7 +76,9 @@ QStringList TST::show(TSTNode *_node, QStringList& _list) {
         QString files;
         Q_FOREACH(Data* data, _node->values.toQList()) {
             if (!buffer.contains(data->file)) {
-                files.append(data->file);
+                QString name = data->file;
+                name.chop(4);
+                files.append(name);
                 files.append(", ");
                 buffer.append(data->file);
             }

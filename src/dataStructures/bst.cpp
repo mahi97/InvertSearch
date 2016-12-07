@@ -63,12 +63,15 @@ QStringList BST::show(BSTNode* _node, QStringList& _list) {
     QStringList buffer;
     Q_FOREACH(Data* data, _node->values.toQList()) {
         if (!buffer.contains(data->file)) {
-            files.append(data->file);
+            QString name = data->file;
+            name.chop(4);
+            files.append(name);
             files.append(", ");
             buffer.append(data->file);
         }
     }
     files.chop(1);
+
     tStr = QString ("|%1 -> ").arg(_node->key_) + files;
     _list.append(tStr);
     qDebug() << _node->key_ << _node->values.size();

@@ -59,7 +59,6 @@ void Trie::search(QString _word,
 
     if (_word == _node->key_) {
         _list = _node->values;
-        qDebug() << "FF" << _node->values.toQList().size();
         return;
     } else {
         Q_FOREACH(TrieNode* c, _node->c) {
@@ -81,13 +80,17 @@ QStringList Trie::show(TrieNode *_node, QStringList& _list) {
         QString files;
         Q_FOREACH(Data* data, _node->values.toQList()) {
             if (!buffer.contains(data->file)) {
-                files.append(data->file);
+                QString name = data->file;
+                name.chop(4);
+                files.append(name);
                 files.append(", ");
                 buffer.append(data->file);
             }
         }
         files.chop(1);
-        files = QString("|%1 -> ").arg(_node->key_) + files;
+        QString name = _node->key_;
+        name.chop(4);
+        files = QString("|%1 -> ").arg(name) + files;
         _list.append(files);
     }
     Q_FOREACH(TrieNode* node, _node->c) {
