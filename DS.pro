@@ -37,7 +37,8 @@ HEADERS  += include/mainwindow.h \
     include/searchthread.h \
     include/dataStructures/linkedlist.h \
     include/terminal/ReplWidget.h \
-    include/monitor.h
+    include/monitor.h \
+    include/dataStructures/stack.h
 
 
 INCLUDEPATH += $$PWD/include

@@ -14,12 +14,13 @@ class Monitor : public QTextEdit {
 public:
     Monitor(QWidget* parent);
     ~Monitor();
+    void show(QString, QColor);
 private:
     QColor defaultColor;
 public slots:
     void slt_summery(Summery*);
     void slt_show(ShowMaterial*);
-    void slt_search(LinkedList*);
+    void slt_search(SearchResult *);
 };
 
 extern Monitor* monitor;

@@ -4,51 +4,49 @@ LinkedList::LinkedList() {
 
     first = NULL;
     head = NULL;
+    m_size = 0;
 
 }
 
 void LinkedList::insert(Data *_node) {
+    if (_node == NULL) return;
     Node* node = new Node;
-    if (first == NULL) {
-        first = node;
-        first->data = _node;
-        head = NULL;
-    } else if(head == NULL) {
-        head = node;
-        head->data = _node;
-        first->next = head;
-        head->next = NULL;
+    if (first == NULL
+     && head  == NULL) {
+
+        first                 = node;
+        first -> data         = _node;
+        head                  = first;
+        head  -> next         = NULL;
+
     } else {
-        head->next = node;
-        head->next->data = _node;
-        head = node;
-        node->next = NULL;
+        head  -> next         = node;
+        head  -> next -> data = _node;
+        head                  = head -> next;
+        head  -> next         = NULL;
     }
     m_size++;
 }
 
 void LinkedList::append(LinkedList *_llist) {
-    size_t size = _llist->size();
-    if (size) {
-        head->next = _llist->getFirst();
-        m_size++;
-        while (size) {
-            head = head->next;
-            size--;
-            m_size++;
-        }
-    }
+    if (_llist           == NULL
+     || _llist -> size() == 0) return;
+
+    m_size      += _llist -> size();
+    head -> next = _llist -> getFirst();
+    head         = _llist -> getHead();
 }
 
 size_t LinkedList::size() {
     return m_size;
 }
 
-QList<Data*> LinkedList::toQList() {
-    QList<Data*> tList;
+QList<Data> LinkedList::toQList() {
+    QList<Data> tList;
     if (first == NULL) return tList;
-    tList.append(first->data);
-    if (head == NULL) return tList;
+    Data datum(first->data);
+
+    tList.append(datum);
 
     Node* tNode = first;
     for (size_t i{0}; i < m_size ; i++) {
@@ -61,4 +59,8 @@ QList<Data*> LinkedList::toQList() {
 
 LinkedList::Node* LinkedList::getFirst() const {
     return first;
+}
+
+LinkedList::Node* LinkedList::getHead() const {
+    return head;
 }

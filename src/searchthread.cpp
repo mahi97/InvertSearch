@@ -46,46 +46,26 @@ SearchThread::~SearchThread() {
 
 void SearchThread::run() {
     while(true) {
-        if (files.size()) {
+        while (files.size()) {
             m_filesCount++;
-            file->setFileName(files.front()->path);
-            QString tName = files.front()->name;
+            proccesFile(files.front());
             files.pop_front();
-            file->open(QIODevice::ReadOnly);
-            unsigned int lineNum{0};
-            QByteArray in = file->readLine();
-            while(!in.isNull()) {
-                buildInvert(in, lineNum, tName);
-                in = file->readLine();
-                lineNum++;
-            }
             emit sig_buildFinished();
-            file->close();
             toShow = true;
-        } else if (words.size()) {
-            QString _search = words.front();
-            LinkedList* list = treeInvert->search(_search);
-            words.pop_front();
+        }
+
+        if (words.size()) {
             while (words.size()) {
-                _search = words.front();
+                searchWord(words.front());
                 words.pop_front();
-
-                list->append(treeInvert->search(_search));
+                emit sig_wordFinished();
             }
-            showM("|-> " + _search, Qt::green);
-            Q_FOREACH(Data* data, list->toQList()) {
+            SearchResult* sr = new SearchResult(list, wordList);
+            emit sig_searchFinished(sr);
+        }
 
-                showM(QString("F : %1, L : %2, W : %3, K : %4")
-                      .arg(data->file)
-                      .arg(data->lineNum)
-                      .arg(data->wordNum)
-                      .arg(data->key));
-            }
-
-            emit sig_searchFinished(list);
-        } else {
-            if (treeInvert != NULL)
-            if (toShow || treeInvert->getBalanced()) {
+        if (treeInvert != NULL) {
+            if (toShow) {
                 toShow = false;
                 treeInvert->show();
                 Summery* summery = new Summery;
@@ -97,17 +77,17 @@ void SearchThread::run() {
                 emit sig_summery(summery);
                 reset();
             }
-            time->restart();
-            sleep(1);
-
         }
+        time->restart();
+        sleep(1);
+
     }
     exec();
 }
 
 void SearchThread::buildInvert(const QByteArray& _data,
-                         unsigned int _lineNum,
-                         const QString& _filename) {
+                               unsigned int _lineNum,
+                               const QString& _filename) {
 
     QStringList temp = QString(_data).split(" ");
     for (size_t i{0}; i < temp.size(); i++) {
@@ -179,9 +159,8 @@ void SearchThread::slt_showWords() {
     showM(" -- Word List -- ", Qt::red);
 
     Q_FOREACH(QString line, treeInvert->show()) {
-        showM("----->>", Qt::blue);
         showM(line);
-        showM("<<-----", Qt::blue);
+        showM("", Qt::blue);
 
     }
 
@@ -189,7 +168,6 @@ void SearchThread::slt_showWords() {
 }
 
 void SearchThread::slt_search(QString _search) {
-    qDebug() << "haha";
     showM(_search + " <-- Done.", Qt::cyan);
     words.append(_search);
 
@@ -203,4 +181,27 @@ void SearchThread::showM(QString _line, QColor _color) {
     ShowMaterial* toShow = new ShowMaterial(_line, _color);
     emit sig_show(toShow);
 
+}
+
+void SearchThread::proccesFile(File *_file) {
+    file->setFileName(_file->path);
+    QString tName = _file->name;
+    file->open(QIODevice::ReadOnly);
+    unsigned int lineNum{0};
+    QByteArray in = file->readLine();
+    while(!in.isNull()) {
+        lineNum++;
+        buildInvert(in, lineNum, tName);
+        in = file->readLine();
+    }
+    file->close();
+}
+
+void SearchThread::searchWord(QString _search) {
+    LinkedList* llist = treeInvert->search(_search);
+
+    if (llist != NULL) {
+        wordList.append(_search);
+        list.append(llist->toQList());
+    }
 }

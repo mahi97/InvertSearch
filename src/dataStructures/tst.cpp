@@ -47,7 +47,9 @@ QStringList TST::show() {
 
 LinkedList* TST::search(QString _word) {
     LinkedList* list = new LinkedList;
-        search(_word, 0, list, root);
+    search(_word, 0, list, root);
+    if (list->size() == 0) list = NULL;
+
     return list;
 }
 
@@ -74,13 +76,13 @@ QStringList TST::show(TSTNode *_node, QStringList& _list) {
         wordsCount++;
         QStringList buffer;
         QString files;
-        Q_FOREACH(Data* data, _node->values.toQList()) {
-            if (!buffer.contains(data->file)) {
-                QString name = data->file;
+        Q_FOREACH(Data data, _node->values.toQList()) {
+            if (!buffer.contains(data.file)) {
+                QString name = data.file;
                 name.chop(4);
                 files.append(name);
                 files.append(", ");
-                buffer.append(data->file);
+                buffer.append(data.file);
             }
         }
         files.chop(1);

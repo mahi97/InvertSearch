@@ -27,6 +27,7 @@
 
 #include "base.h"
 #include "searchthread.h"
+#include "monitor.h"
 
 class TabDockWidget : public QDockWidget
 {
@@ -72,6 +73,7 @@ public slots:
     void slt_update(QString _file);
     void slt_changeTree(QString _tree);
     void slt_del(QString);
+    void slt_showLines(SearchResult*);
 
 
 signals:

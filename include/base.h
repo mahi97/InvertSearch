@@ -27,6 +27,23 @@
 
 
 struct Data {
+
+    Data() = default;
+    Data(const Data& _other) {
+        this->file = _other.file;
+        this->key  = _other.key;
+        this->lineNum = _other.lineNum;
+        this->wordNum = _other.wordNum;
+    }
+
+    Data(const Data* _other) {
+        if (_other == NULL) return;
+        this->file = _other->file;
+        this->key  = _other->key;
+        this->lineNum = _other->lineNum;
+        this->wordNum = _other->wordNum;
+    }
+
     QString key;
     QString file;
     unsigned int lineNum;
@@ -45,6 +62,18 @@ struct Summery {
     int timeTakesToBuild;
     int wordsCount;
     int filesCount;
+};
+
+struct SearchResult {
+
+    SearchResult() = default;
+    SearchResult(QList<Data> _l, QStringList _w) {
+        result.append(_l);
+        words.append(_w);
+    }
+
+    QList<Data> result;
+    QStringList words;
 };
 
 struct ShowMaterial {

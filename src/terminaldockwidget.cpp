@@ -10,22 +10,28 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
 
     wordsToSearch = 0;
 
-    connect(repl, SIGNAL(command(QString)),
-            this, SLOT(procces(QString)));
-    connect(this, SIGNAL(resualtReady(QString)),
-            repl, SLOT(result(QString)));
-    connect(this, SIGNAL(sig_add(QString)),
+    connect(repl   , SIGNAL(command(QString)),
+            this   , SLOT(procces(QString)));
+
+    connect(this   , SIGNAL(resualtReady(QString)),
+            repl   , SLOT(result(QString)));
+
+    connect(this   , SIGNAL(sig_add(QString)),
             tabDock, SLOT(slt_add(QString)));
-    connect(this, SIGNAL(sig_del(QString)),
+
+    connect(this   , SIGNAL(sig_del(QString)),
             tabDock, SLOT(slt_del(QString)));
-    connect(this, SIGNAL(sig_showWords()),
-            search, SLOT(slt_showWords()),
+
+    connect(this   , SIGNAL(sig_showWords()),
+            search , SLOT(slt_showWords()),
             Qt::QueuedConnection);
-    connect(this, SIGNAL(sig_searchWord(QString)),
-            search, SLOT(slt_search(QString)),
+
+    connect(this   , SIGNAL(sig_searchWord(QString)),
+            search , SLOT(slt_search(QString)),
             Qt::QueuedConnection);
-    connect(search, SIGNAL(sig_searchFinished(LinkedList*)),
-            this, SLOT(slt_searchFinished(LinkedList*)),
+
+    connect(search , SIGNAL(sig_wordFinished()),
+            this   , SLOT(slt_searchFinished()),
             Qt::QueuedConnection);
 
 }
@@ -58,12 +64,10 @@ void TerminalDockWidget::procces(QString _commad) {
 
 }
 
-void TerminalDockWidget::slt_searchFinished(LinkedList*) {
+void TerminalDockWidget::slt_searchFinished() {
     wordsToSearch--;
     if (wordsToSearch == 0) {
-        monitor->setTextColor(Qt::red);
-        monitor->append(" -- SEARCH END -- ");
-        monitor->setTextColor(Qt::black);
+        emit resualtReady("Search is Done. ");
     }
 }
 
@@ -212,7 +216,7 @@ void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
                 wordsToSearch++;
             }
 
-            emit resualtReady("Start Searching for Words ... ");
+//            emit resualtReady("Start Searching for Words ... ");
             monitor->setTextColor(Qt::red);
             monitor->append(" -- SEARCH START -- ");
             monitor->setTextColor(Qt::black);

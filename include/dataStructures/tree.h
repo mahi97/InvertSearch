@@ -7,7 +7,7 @@
 
 
 struct Node {
-    QString key_;
+    QString    key_;
     LinkedList values;
 };
 
@@ -16,18 +16,16 @@ class Tree
 
 public:
     Tree();
-    virtual void insert(Data*)        = 0;
-    virtual QStringList show()        = 0;
-    /*virtual*/ void del(size_t position) /*= 0*/;
-    virtual LinkedList* search(QString)      = 0;
-    /*virtual*/ void search(QStringList)  /*= 0*/;
+    virtual void        insert(Data*)   = 0;
+    virtual QStringList show()          = 0;
+    virtual LinkedList* search(QString) = 0;
 
 private:
 
-    Property(bool, Balanced, balanced);
-    PropertyGet(int, Size, size);
-    PropertyGet(int, WordsCount, wordsCount);
-    PropertyGet(QString, Name, name);
+    Property   (bool   , Balanced  , balanced);
+    PropertyGet(int    , Size      , size);
+    PropertyGet(QString, Name      , name);
+    PropertyGet(int    , WordsCount, wordsCount);
 };
 
 #endif // TREE_H

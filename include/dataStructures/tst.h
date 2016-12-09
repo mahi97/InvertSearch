@@ -18,9 +18,7 @@ public:
     TST();
     virtual void insert(Data*)       ;
     virtual QStringList show();
-//    virtual void del(size_t position);
     virtual LinkedList* search(QString)     ;
-//    virtual void search(QStringList) ;
 
 private:
     void insert(Data *, TSTNode*&, size_t cursor);

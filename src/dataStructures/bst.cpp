@@ -50,6 +50,7 @@ QStringList BST::show() {
 LinkedList* BST::search(QString _word) {
     LinkedList* list = new LinkedList;
     search(_word, list, root);
+    if (list->size() == 0) list = NULL;
     return list;
 }
 
@@ -61,18 +62,18 @@ QStringList BST::show(BSTNode* _node, QStringList& _list) {
     show(_node->lc, _list);
 
     QStringList buffer;
-    Q_FOREACH(Data* data, _node->values.toQList()) {
-        if (!buffer.contains(data->file)) {
-            QString name = data->file;
+    Q_FOREACH(Data data, _node->values.toQList()) {
+        if (!buffer.contains(data.file)) {
+            QString name = data.file;
             name.chop(4);
             files.append(name);
             files.append(", ");
-            buffer.append(data->file);
+            buffer.append(data.file);
         }
     }
     files.chop(1);
 
-    tStr = QString ("|%1 -> ").arg(_node->key_) + files;
+    tStr = QString ("> %1 -> ").arg(_node->key_) + files;
     _list.append(tStr);
     qDebug() << _node->key_ << _node->values.size();
 

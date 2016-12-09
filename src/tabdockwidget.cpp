@@ -35,6 +35,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     connect(btnReset, SIGNAL(clicked(bool)), this, SLOT(slt_reset()));
     connect(lineEditDirectory, SIGNAL(editingFinished()), this, SLOT(slt_textEdit()));
     connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_reset()), Qt::QueuedConnection);
+    connect(search, SIGNAL(sig_searchFinished(SearchResult*)), this, SLOT(slt_showLines(SearchResult*)));
 }
 
 TabDockWidget::~TabDockWidget() {
@@ -148,19 +149,20 @@ void TabDockWidget::slt_update(QString _name) {
 }
 
 void TabDockWidget::slt_build() {
+    slt_changeTree(cmbDataStrct->currentText());
     if (files.isEmpty()) {
         QMessageBox::critical(this,
-                             "Can't Build",
-                             "There's no file to build",
-                             QMessageBox::Ok);
+                              "Can't Build",
+                              "There's no file to build",
+                              QMessageBox::Ok);
         return;
     }
 
     if (cmbDataStrct->currentIndex() == 0) {
         QMessageBox::critical(this,
-                             "Can't Build",
-                             "You Should Select a Tree First.",
-                             QMessageBox::Ok);
+                              "Can't Build",
+                              "You Should Select a Tree First.",
+                              QMessageBox::Ok);
         return;
     }
     btnBuild->setEnabled(false);
@@ -211,6 +213,47 @@ void TabDockWidget::slt_del(QString _name) {
             paths.removeAt(i);
             break;
         }
+    }
+}
+
+void TabDockWidget::slt_showLines(SearchResult * _sr) {
+    if (_sr->words.size() == 1) {
+        Q_FOREACH(Data datum, _sr->result) {
+            QFile file(directory + QDir::separator() + datum.file);
+            QByteArray ba;
+            QString res;
+            file.open(QIODevice::ReadOnly);
+            for(int i{};i < datum.lineNum; i++) ba = file.readLine();
+            if (ba.size() < 5) continue;
+            ba.chop(2);
+            QStringList split = QString(ba).split(" ");
+            if (split.size() < 8) { //Full Sentence
+                res = QString(ba);
+            } else if (split.size() - datum.wordNum > 3 && datum.wordNum > 3) {
+                res.append("... ");
+                for(size_t i{datum.wordNum - 3}; i < datum.wordNum + 3;i++) {
+                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                        res.append(split.at(i) + " ");
+                }
+                res.append(" ...");
+
+            } else if (split.size() - datum.wordNum > 3) { // NO END
+                for(size_t i{0}; i < datum.wordNum + 3;i++)
+                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                        res.append(split.at(i) + " ");
+                res.append(" ...");
+            } else if (datum.wordNum > 3) { // NO START
+                res.append("... ");
+                for(size_t i{datum.wordNum - 3}; i < split.size();i++)
+                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                        res.append(split.at(i) + " ");
+            }
+            res = "|" + datum.file + QString(" -> L: %1 ").arg(datum.lineNum) +" "+ res;
+            monitor->show(res, Qt::black);
+            file.close();
+        }
+    } else {
+
     }
 }
 

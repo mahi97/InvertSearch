@@ -16,9 +16,7 @@ public:
     BST();
     virtual void insert(Data*);
     QStringList show();
-//    virtual void del(size_t position);
     virtual LinkedList *search(QString);
-//    virtual void search(QStringList);
 
 private:
     void insert(Data *_data, BSTNode *&_node);

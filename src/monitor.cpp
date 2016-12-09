@@ -18,9 +18,9 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
             Qt::QueuedConnection);
 
     connect(search,
-            SIGNAL(sig_searchFinished(LinkedList*)),
+            SIGNAL(sig_searchFinished(SearchResult*)),
             this,
-            SLOT(slt_search(LinkedList*)),
+            SLOT(slt_search(SearchResult*)),
             Qt::QueuedConnection);
 
 
@@ -36,9 +36,14 @@ Monitor::~Monitor() {
     file.close();
 }
 
+void Monitor::show(QString _str, QColor _color) {
+    this->setTextColor(_color);
+    this->append(_str);
+    this->setTextColor(Qt::black);
+}
+
 
 void Monitor::slt_summery(Summery *_sum) {
-    qDebug() << "DDDDD";
     this->setTextColor(Qt::red);
     this->append(" -- BUILD SUMMERY --");
     this->setTextColor(Qt::blue);
@@ -61,6 +66,12 @@ void Monitor::slt_show(ShowMaterial * _toShow) {
 
 }
 
-void Monitor::slt_search(LinkedList *_list) {
-    qDebug() << "Fun ";
-}
+void Monitor::slt_search(SearchResult* _list) {
+
+
+//    _list->result.at(0).
+
+
+    this->setTextColor(Qt::red);
+    this->append(" -- SEARCH END -- ");
+    this->setTextColor(Qt::black);}

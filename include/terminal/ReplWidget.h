@@ -6,7 +6,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocumentFragment>
-#include <QStack>
+#include <dataStructures/stack.h>
 #include <QPalette>
 #include <QDebug>
 
@@ -45,8 +45,8 @@ private:
   void initPalete();
 
   QString userPrompt;
-  QStack<QString> historyUp;
-  QStack<QString> historyDown;
+  Stack historyUp;
+  Stack historyDown;
   bool locked, historySkip;
 
   QPalette m_palette;
