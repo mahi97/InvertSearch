@@ -42,7 +42,10 @@ private:
     QStringList wordList;
     void run();
     bool toShow{false};
-    void buildInvert(const QByteArray &_data, unsigned int _lineNum, const QString &_filename);
+    void buildInvert(const QByteArray &_data,
+                     unsigned int _lineNum,
+                     const QString &_filename,
+                     bool del = false);
     void buildForward(const QByteArray &_data, const QString &_filename);
     Data* makeData(const QString& _word,
                   unsigned int _wordNum,

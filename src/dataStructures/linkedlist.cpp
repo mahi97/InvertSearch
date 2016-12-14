@@ -12,7 +12,7 @@ void LinkedList::insert(Data *_node) {
     if (_node == NULL) return;
     Node* node = new Node;
     if (first == NULL
-     && head  == NULL) {
+            && head  == NULL) {
 
         first                 = node;
         first -> data         = _node;
@@ -30,12 +30,56 @@ void LinkedList::insert(Data *_node) {
 
 void LinkedList::append(LinkedList *_llist) {
     if (_llist           == NULL
-     || _llist -> size() == 0) return;
+            || _llist -> size() == 0) return;
 
     m_size      += _llist -> size();
     head -> next = _llist -> getFirst();
     head         = _llist -> getHead();
 }
+
+int LinkedList::remove(Data* _node) {
+    if (_node == NULL
+            || (first == NULL && head == NULL)) return m_size;
+
+    Node* cursor = first;
+    Node* last = NULL;
+    if (m_size == 1) {
+        if (cursor->data = _node) {
+            first = NULL;
+            head  = NULL;
+            m_size = 0;
+            delete cursor;
+        }
+
+    } else {
+
+        for (size_t i{};i < m_size; i++) {
+            if (cursor == NULL) break;
+            if (*(cursor->data) == *_node) {
+                m_size--;
+                if (i == 0) {
+                    first = first -> next;
+                    delete cursor;
+                    break;
+                } else if (i == m_size - 1) {
+                    head = last;
+                    delete cursor;
+                    break;
+                } else {
+                    last -> next = cursor -> next;
+                    delete cursor;
+                    break;
+                }
+
+            } else {
+                last = cursor;
+                cursor = cursor->next;
+            }
+        }
+    }
+    return m_size;
+}
+
 
 size_t LinkedList::size() {
     return m_size;

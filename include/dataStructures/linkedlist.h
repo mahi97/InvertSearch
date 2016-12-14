@@ -16,7 +16,7 @@ public:
 
     void insert(Data* _node);
     void append(LinkedList* _llist);
-    void remove();
+    int remove(Data* _node);
     size_t size();
     QList<Data> toQList();
     LinkedList::Node* getFirst() const;

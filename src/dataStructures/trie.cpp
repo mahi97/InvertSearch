@@ -15,6 +15,11 @@ void Trie::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
+void Trie::remove(Data *)
+{
+
+}
+
 void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
 
     Q_FOREACH(TrieNode* _child, _node->c) {

@@ -14,12 +14,16 @@ class BST : public Tree
 
 public:
     BST();
-    virtual void insert(Data*);
-    QStringList show();
-    virtual LinkedList *search(QString);
+    virtual void        insert(Data*);
+    virtual void        remove(Data*);
+    virtual QStringList show();
+    virtual LinkedList* search(QString);
+
 
 private:
     void insert(Data *_data, BSTNode *&_node);
+    void remove(Data *, BSTNode*&, BSTNode*&, bool left = false);
+    void del(BSTNode*, BSTNode *_parent, bool left);
     QStringList show(BSTNode*, QStringList &_list);
     BSTNode* makeNode(Data*);
     void search(QString _word, LinkedList *&_list, BSTNode*_node);

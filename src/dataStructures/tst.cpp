@@ -9,6 +9,11 @@ void TST::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
+void TST::remove(Data *)
+{
+
+}
+
 void TST::insert(Data *_data, TSTNode *& _node, size_t cursor) {
     if (_node == NULL) {
         _node = makeNode(_data, cursor);

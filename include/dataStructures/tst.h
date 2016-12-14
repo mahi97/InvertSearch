@@ -17,7 +17,9 @@ class TST : public Tree
 public:
     TST();
     virtual void insert(Data*)       ;
+    virtual void remove(Data*);
     virtual QStringList show();
+
     virtual LinkedList* search(QString)     ;
 
 private:

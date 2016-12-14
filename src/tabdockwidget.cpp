@@ -107,6 +107,7 @@ void TabDockWidget::slt_open() {
     files.clear();
     names.clear();
     paths.clear();
+    lastFiles.clear();
     model->clear();
     QDirIterator it(directory);
     while (it.hasNext()) {
@@ -147,7 +148,7 @@ void TabDockWidget::slt_update(QString _name) {
 }
 
 void TabDockWidget::slt_build() {
-    slt_changeTree(cmbDataStrct->currentText());
+    //    slt_changeTree(cmbDataStrct->currentText());
     if (files.isEmpty()) {
         QMessageBox::critical(this,
                               "Can't Build",
@@ -163,11 +164,17 @@ void TabDockWidget::slt_build() {
                               QMessageBox::Ok);
         return;
     }
-    btnBuild->setEnabled(false);
-    cmbDataStrct->setEnabled(false);
     Q_FOREACH(File* file, files) {
-        emit sig_fileToBuild(file);
-        signalCounter++;
+        if (!lastFiles.contains(file->name)) {
+            btnBuild->setEnabled(false);
+            cmbDataStrct->setEnabled(false);
+            lastFiles.append(file->name);
+            emit sig_fileToBuild(file);
+            signalCounter++;
+        }
+    }
+    if (signalCounter == 0) {
+        monitor->show("Tree is Update, There's Nothing to build", Qt::red);
     }
 }
 
@@ -180,6 +187,8 @@ void TabDockWidget::slt_buildComplete() {
 }
 
 void TabDockWidget::slt_changeTree(QString _tree) {
+
+    lastFiles.clear();
 
     if(_tree == dataStructs[0])
         emit sig_changeTree(ETree::None);
@@ -206,9 +215,13 @@ void TabDockWidget::slt_del(QString _name) {
                     model->removeRow(j);
                 }
             }
+            File* tempFile = files[i];
+            tempFile->del = true;
+            emit sig_fileToBuild(tempFile);
             files.removeAt(i);
             names.removeAt(i);
             paths.removeAt(i);
+
             break;
         }
     }

@@ -45,6 +45,7 @@ SearchThread::~SearchThread() {
 void SearchThread::run() {
     while(true) {
         int fileTime;
+        // Build The Tree
         if (files.size()) {
             fileTime = time->elapsed();
             while (files.size()) {
@@ -59,6 +60,7 @@ void SearchThread::run() {
 
         }
 
+        // Seearch Words or Phrase
         if (words.size()) {
             int wordTime = time->elapsed();
             list.clear();
@@ -76,6 +78,8 @@ void SearchThread::run() {
             emit sig_searchFinished(sr);
         }
 
+
+        // Show resualt or Summery
         if (treeInvert != NULL) {
             if (toShow) {
                 toShow = false;
@@ -98,13 +102,19 @@ void SearchThread::run() {
 
 void SearchThread::buildInvert(const QByteArray& _data,
                                unsigned int _lineNum,
-                               const QString& _filename) {
+                               const QString& _filename,
+                               bool del) {
 
     QStringList temp = QString(_data).split(" ");
     for (size_t i{0}; i < temp.size(); i++) {
         if (!stopWord.contains(temp[i].toLower())
                 && !temp[i].isEmpty()) {
-            treeInvert->insert(makeData(temp[i], i, _lineNum, _filename));
+            if (del) {
+                qDebug() << "DSAf";
+                treeInvert->remove(makeData(temp[i], i, _lineNum, _filename));
+            } else {
+                treeInvert->insert(makeData(temp[i], i, _lineNum, _filename));
+            }
         }
     }
 
@@ -195,12 +205,13 @@ void SearchThread::showM(QString _line, QColor _color) {
 void SearchThread::proccesFile(File *_file) {
     file->setFileName(_file->path);
     QString tName = _file->name;
+    bool del = _file->del;
     file->open(QIODevice::ReadOnly);
     unsigned int lineNum{0};
     QByteArray in = file->readLine();
     while(!in.isNull()) {
         lineNum++;
-        buildInvert(in, lineNum, tName);
+        buildInvert(in, lineNum, tName, del);
         in = file->readLine();
     }
     file->close();

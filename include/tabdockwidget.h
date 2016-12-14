@@ -55,6 +55,7 @@ private:
     QListView *fileViewer;
     QStandardItemModel *model;
     QList<File*> files;
+    QStringList lastFiles;
 
     int signalCounter;
 

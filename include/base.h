@@ -44,6 +44,18 @@ struct Data {
         this->wordNum = _other->wordNum;
     }
 
+    bool operator ==(const Data& _other) {
+        if (this->file    == _other.file
+        &&  this->key     == _other.key
+        &&  this->lineNum == _other.lineNum
+        &&  this->wordNum == _other.wordNum) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     QString key;
     QString file;
     unsigned int lineNum;
@@ -52,8 +64,13 @@ struct Data {
 };
 
 struct File {
+    File() {
+        del = false;
+    }
+
     QString path;
     QString name;
+    bool del;
 };
 
 struct Summery {

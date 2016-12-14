@@ -20,11 +20,10 @@ class Trie : public Tree
 
 public:
     Trie();
-    virtual void insert(Data*)       ;
+    virtual void        insert(Data*);
+    virtual void        remove(Data*);
     virtual QStringList show();
-//    virtual void del(size_t position);
-    virtual LinkedList* search(QString)     ;
-//    virtual void search(QStringList) ;
+    virtual LinkedList* search(QString);
 
 private:
     void search(QString, int, LinkedList *&, TrieNode*);

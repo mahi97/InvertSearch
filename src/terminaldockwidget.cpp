@@ -130,21 +130,10 @@ void TerminalDockWidget::proccesList(const QStringList & _cmds) {
                 emit resualtReady("Files in List will be shown.");
                 monitor->setTextColor(Qt::red);
                 monitor->append(" -- Files That Listed --");
-                QStringList buffer;
                 Q_FOREACH(QString file, tabDock->getNames()) {
                     monitor->setTextColor(Qt::black);
                     if (file.endsWith(".txt"))
-                    buffer.append(file);
-                    if (buffer.size() > 5) {
-                        monitor->append(QString("%1, %2, %3, %4, %5, %6")
-                                        .arg(buffer[0])
-                                .arg(buffer[1])
-                                .arg(buffer[2])
-                                .arg(buffer[3])
-                                .arg(buffer[4])
-                                .arg(buffer[5]));
-                        buffer.clear();
-                    }
+                        monitor->append(QString(" - %1").arg(file));
                 }
                 monitor->setTextColor(Qt::red);
                 monitor->append(" -- Files That Listed END --");
@@ -153,23 +142,14 @@ void TerminalDockWidget::proccesList(const QStringList & _cmds) {
             } else if (_cmds[0] == "-f") {
                 emit resualtReady("File in Directory will be shown");
                 QDir dir(tabDock->getDirectory());
-                QStringList buffer;
                 monitor->setTextColor(Qt::red);
                 monitor->append(" -- Files That in Directory --");
                 Q_FOREACH(QString file, dir.entryList()) {
                     monitor->setTextColor(Qt::black);
-                    if (file.endsWith(".txt"))
-                    buffer.append(file);
-                    if (buffer.size() > 5) {
-                        monitor->append(QString("%1, %2, %3, %4, %5, %6")
-                                        .arg(buffer[0])
-                                .arg(buffer[1])
-                                .arg(buffer[2])
-                                .arg(buffer[3])
-                                .arg(buffer[4])
-                                .arg(buffer[5]));
-                        buffer.clear();
+                    if (file.endsWith(".txt")) {
+                        monitor->append(QString(" - %1").arg(file));
                     }
+
                 }
                 monitor->setTextColor(Qt::red);
                 monitor->append(" -- Files in Directory END --");
@@ -215,7 +195,7 @@ void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
                 wordsToSearch++;
             }
 
-//            emit resualtReady("Start Searching for Words ... ");
+            //            emit resualtReady("Start Searching for Words ... ");
             monitor->setTextColor(Qt::red);
             monitor->append(" -- SEARCH START -- ");
             monitor->setTextColor(Qt::black);

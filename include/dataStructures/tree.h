@@ -17,6 +17,7 @@ class Tree
 public:
     Tree();
     virtual void        insert(Data*)   = 0;
+    virtual void        remove(Data*)   = 0;
     virtual QStringList show()          = 0;
     virtual LinkedList* search(QString) = 0;
 
