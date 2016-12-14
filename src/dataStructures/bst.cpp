@@ -9,8 +9,8 @@ void BST::insert(Data* _data) {
     insert(_data, root);
 }
 
-void BST::remove(Data * _data) {
-    remove(_data, root, root, 0);
+void BST::remove(QString _data) {
+    remove(_data, root, root, false);
 }
 
 void BST::insert(Data *_data, BSTNode*& _node) {
@@ -25,22 +25,21 @@ void BST::insert(Data *_data, BSTNode*& _node) {
     }
 }
 
-void BST::remove(Data *_data, BSTNode *& _node, BSTNode *& _parent, bool left) {
-    if (_node == NULL) {
-        qDebug() << "What";
-        return;
-    } else if (_data->key.toLower() > _node->key_) {
-        remove(_data, _node->rc, _node, false);
-    } else if (_data->key.toLower() < _node->key_) {
-        remove(_data, _node->lc, _node, true);
-    } else {
-        if (_node->values.remove(_data) == 0) {
-//            del(_node, _parent, left);
-        }
+void BST::remove(QString _data, BSTNode *& _node, BSTNode *& _parent, bool left) {
+    if (_node == NULL) return;
+
+    remove(_data, _node->rc, _node, false);
+    remove(_data, _node->lc, _node, true);
+    if (_node->values.remove(_data) == 0) {
+        del(_node, _parent, left);
     }
 }
 
 void BST::del(BSTNode *_node, BSTNode* _parent, bool left) {
+
+    //TODO : FIX THIS
+    return;
+
     if (_node == root) {
         // TODO : fix this !
         qDebug() << "Please Don't remove root";

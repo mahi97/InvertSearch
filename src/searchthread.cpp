@@ -105,19 +105,19 @@ void SearchThread::buildInvert(const QByteArray& _data,
                                const QString& _filename,
                                bool del) {
 
-    QStringList temp = QString(_data).split(" ");
-    for (size_t i{0}; i < temp.size(); i++) {
-        if (!stopWord.contains(temp[i].toLower())
-                && !temp[i].isEmpty()) {
-            if (del) {
-                qDebug() << "DSAf";
-                treeInvert->remove(makeData(temp[i], i, _lineNum, _filename));
-            } else {
+    if (del) {
+        treeInvert->remove(_filename);
+
+    } else {
+
+        QStringList temp = QString(_data).split(" ");
+        for (size_t i{0}; i < temp.size(); i++) {
+            if (!stopWord.contains(temp[i].toLower())
+                    && !temp[i].isEmpty()) {
                 treeInvert->insert(makeData(temp[i], i, _lineNum, _filename));
             }
         }
     }
-
 }
 
 void SearchThread::buildForward(const QByteArray &_data,

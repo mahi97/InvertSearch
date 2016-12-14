@@ -15,7 +15,7 @@ void Trie::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
-void Trie::remove(Data *)
+void Trie::remove(QString)
 {
 
 }

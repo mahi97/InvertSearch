@@ -21,7 +21,8 @@ public:
 
     void insert(Data* _node);
     void append(LinkedList* _llist);
-    int remove(Data* _node);
+    int  remove(Data* _node);
+    int  remove(QString _file);
     size_t size();
     QList<Data> toQList();
     LinkedList::Node* getFirst() const;

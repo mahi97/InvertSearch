@@ -22,6 +22,9 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
     connect(this   , SIGNAL(sig_del(QString)),
             tabDock, SLOT(slt_del(QString)));
 
+    connect(this   , SIGNAL(sig_update(QString)),
+            tabDock, SLOT(slt_update(QString)));
+
     connect(this   , SIGNAL(sig_showWords()),
             search , SLOT(slt_showWords()),
             Qt::QueuedConnection);
@@ -29,6 +32,7 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
     connect(this   , SIGNAL(sig_searchWord(QString)),
             search , SLOT(slt_search(QString)),
             Qt::QueuedConnection);
+
 
     connect(search , SIGNAL(sig_wordFinished()),
             this   , SLOT(slt_searchFinished()),
@@ -109,7 +113,10 @@ void TerminalDockWidget::proccesUpdt(const QStringList & _cmds) {
     if (_cmds.size()) {
         QString name = _cmds[0] + ".txt";
         if (tabDock->getNames().contains(name)) {
-            emit sig_update(name);
+            emit sig_del(name);
+            QString dirStr = tabDock->getDirectory();
+            QString command = dirStr + QDir::separator() + _cmds[0] + ".txt";
+            emit sig_update(command);
             emit resualtReady(_cmds[0] + " Successfully Updated");
         } else {
             emit resualtReady("err : document not found.");

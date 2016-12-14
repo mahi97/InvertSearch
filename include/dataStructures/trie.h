@@ -21,7 +21,7 @@ class Trie : public Tree
 public:
     Trie();
     virtual void        insert(Data*);
-    virtual void        remove(Data*);
+    virtual void        remove(QString);
     virtual QStringList show();
     virtual LinkedList* search(QString);
 

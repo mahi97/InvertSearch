@@ -134,14 +134,18 @@ void TabDockWidget::slt_add(QString _file) {
     model->appendRow(item);
 }
 
-void TabDockWidget::slt_update(QString _name) {
-    File* tFile;
-    Q_FOREACH(File* file, files) {
-        if (file->name == _name) {
-            tFile = file;
-            break;
-        }
-    }
+void TabDockWidget::slt_update(QString _file) {
+    QStringList temp;
+    temp = _file.split(QDir::separator());
+    File* tFile = new File;
+    tFile->name = temp.back();
+    tFile->path = _file;
+    names.append(tFile->name);
+    paths.append(tFile->path);
+    files.append(tFile);
+    QStandardItem *item = new QStandardItem(temp.back());
+    item->setEditable(false);
+    model->appendRow(item);
 
     emit sig_fileToBuild(tFile);
     signalCounter++;
