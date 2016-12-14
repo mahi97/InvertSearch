@@ -7,7 +7,7 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
 {
     repl = new ReplWidget(this);
     setWidget(repl);
-
+    searchPhrase = false;
     wordsToSearch = 0;
 
     connect(repl   , SIGNAL(command(QString)),
@@ -81,7 +81,6 @@ void TerminalDockWidget::proccesAdd(const QStringList & _cmds) {
         if (tabDock->getPaths().contains(command)) {
             emit resualtReady("err : Already exist, you may want to update.");
         } else if (!dir.entryList().contains(_cmds[0] + ".txt")) {
-            qDebug() << dir.entryList();
             emit resualtReady("err : document not found.");
         } else {
             emit sig_add(command);
@@ -123,7 +122,6 @@ void TerminalDockWidget::proccesUpdt(const QStringList & _cmds) {
 void TerminalDockWidget::proccesList(const QStringList & _cmds) {
     if (_cmds.size()) {
         if (_cmds[0].startsWith("-")) {
-            qDebug() << _cmds[0];
             if (_cmds[0] == "-w") {
                 emit resualtReady("Word will be shown.");
                 emit sig_showWords();
@@ -189,11 +187,11 @@ void TerminalDockWidget::proccesList(const QStringList & _cmds) {
 void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
     if (_cmds.size() > 1) {
         if (_cmds[0] == "-w") {
+            searchPhrase = false;
             if (_cmds[1].startsWith("\"") && _cmds[1].endsWith("\"")) {
                 QString word = _cmds[1];
                 word.chop(1);
                 word.remove(0, 1);
-                qDebug() << word;
                 wordsToSearch++;
                 emit sig_searchWord(word);
                 emit resualtReady("Start Searching for : " + word);
@@ -206,6 +204,7 @@ void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
                 emit resualtReady("err : put word between `\"` ");
             }
         } else if (_cmds[0] == "-s") {
+            searchPhrase = true;
             QStringList cmds = _cmds;
             cmds.pop_front();
 

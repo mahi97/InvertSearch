@@ -31,7 +31,6 @@ SearchThread::SearchThread(QObject* parent)
 
     stopWord = stopString.split("\r\n");
     stopWord.append(signList);
-    qDebug() << this->thread();
 
     file = new QFile;
     time = new QTime;
@@ -41,45 +40,57 @@ SearchThread::SearchThread(QObject* parent)
 }
 
 SearchThread::~SearchThread() {
-    qDebug() << "Die";
 }
 
 void SearchThread::run() {
     while(true) {
-        while (files.size()) {
-            m_filesCount++;
-            proccesFile(files.front());
-            files.pop_front();
-            emit sig_buildFinished();
+        int fileTime;
+        if (files.size()) {
+            fileTime = time->elapsed();
+            while (files.size()) {
+
+                m_filesCount++;
+                proccesFile(files.front());
+                files.pop_front();
+                emit sig_buildFinished();
+            }
             toShow = true;
+            fileTime = time->elapsed() - fileTime;
+
         }
 
         if (words.size()) {
+            int wordTime = time->elapsed();
+            list.clear();
+            wordList.clear();
+            qDebug() << time->elapsed() << "<--";
+
             while (words.size()) {
                 searchWord(words.front());
                 words.pop_front();
                 emit sig_wordFinished();
             }
             SearchResult* sr = new SearchResult(list, wordList);
+            qDebug() << time->elapsed();
+            sr->time = time->elapsed() - wordTime;
             emit sig_searchFinished(sr);
         }
 
         if (treeInvert != NULL) {
             if (toShow) {
                 toShow = false;
-                treeInvert->show();
                 Summery* summery = new Summery;
                 summery->treeName = treeInvert->getName();
                 summery->filesCount = m_filesCount;
-                summery->timeTakesToBuild = time->elapsed();
+                summery->timeTakesToBuild = fileTime;
                 summery->treeSize = treeInvert->getSize();
                 summery->wordsCount = treeInvert->getWordsCount();
                 emit sig_summery(summery);
                 reset();
             }
         }
-        time->restart();
         sleep(1);
+        if (time->elapsed() > 10000000000) time->restart();
 
     }
     exec();
@@ -109,7 +120,6 @@ Data* SearchThread::makeData(const QString &_word,
                              unsigned int _wordNum,
                              unsigned int _lineNum,
                              const QString &_file) {
-    //    qDebug() << _word;
     Data* data = new Data();
     data->key = _word;
     data->wordNum = _wordNum;
@@ -146,7 +156,7 @@ void SearchThread::slt_chooseTree(ETree _tree) {
     default:
         break;
     }
-
+    time->restart();
 }
 
 void SearchThread::slt_buildFile(File *_file) {
@@ -155,7 +165,6 @@ void SearchThread::slt_buildFile(File *_file) {
 }
 
 void SearchThread::slt_showWords() {
-    qDebug() << "words";
     showM(" -- Word List -- ", Qt::red);
 
     Q_FOREACH(QString line, treeInvert->show()) {

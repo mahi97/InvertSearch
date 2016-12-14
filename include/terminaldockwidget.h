@@ -27,6 +27,7 @@ private:
     void proccesSrch  (const QStringList &);
 
     int wordsToSearch;
+    bool searchPhrase;
 
 public slots:
     void procces(QString);

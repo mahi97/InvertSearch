@@ -31,7 +31,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
     connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
     connect(this, SIGNAL(sig_fileToBuild(File*)), search, SLOT(slt_buildFile(File*)), Qt::QueuedConnection);
-    connect(search, SIGNAL(sig_buildFinished()), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
+    connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
     connect(btnReset, SIGNAL(clicked(bool)), this, SLOT(slt_reset()));
     connect(lineEditDirectory, SIGNAL(editingFinished()), this, SLOT(slt_textEdit()));
     connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_reset()), Qt::QueuedConnection);
@@ -93,7 +93,6 @@ void TabDockWidget::slt_textEdit() {
     text = text + ((text.endsWith("/")) ? "" : "/");
     QFileInfo fi = QFileInfo(text);
     if (fi.exists() && fi.isDir()) {
-        qDebug() << fi.path();
         directory = fi.path();
         slt_open();
     } else {
@@ -105,7 +104,6 @@ void TabDockWidget::slt_textEdit() {
 }
 
 void TabDockWidget::slt_open() {
-    qDebug() << "Open --> " << directory;
     files.clear();
     names.clear();
     paths.clear();
@@ -174,11 +172,11 @@ void TabDockWidget::slt_build() {
 }
 
 void TabDockWidget::slt_buildComplete() {
-    signalCounter--;
-    if (signalCounter == 0) {
-        btnBuild->setEnabled(true);
-        cmbDataStrct->setEnabled(true);
-    }
+    //    signalCounter--;
+    //    if (signalCounter == 0) {
+    btnBuild->setEnabled(true);
+    cmbDataStrct->setEnabled(true);
+    //    }
 }
 
 void TabDockWidget::slt_changeTree(QString _tree) {
@@ -218,7 +216,7 @@ void TabDockWidget::slt_del(QString _name) {
 
 void TabDockWidget::slt_showLines(SearchResult * _sr) {
     if (_sr->words.size() == 1) {
-        Q_FOREACH(Data datum, _sr->result) {
+        Q_FOREACH(Data datum, _sr->result[0]) {
             QFile file(directory + QDir::separator() + datum.file);
             QByteArray ba;
             QString res;
@@ -253,10 +251,69 @@ void TabDockWidget::slt_showLines(SearchResult * _sr) {
             file.close();
         }
     } else {
+        bool delShare = true;
+        QList<Data> shared = _sr->result[0];
+        QStringList files;
+        for (size_t i{1}; i < _sr->words.size(); i++) {
+            for (size_t k{}; k < shared.size(); k++) {
+                delShare = true;
+                for(size_t j{}; j < _sr->result[i].size(); j++) {
+                    if (shared[k].file == _sr->result[i][j].file) {
+                        if (!files.contains(shared[k].file))
+                            files.append(shared[k].file);
+                        shared.append(_sr->result[i][j]);
+                        _sr->result[i].removeAt(j);
+                        delShare = false;
+                    }
+                }
+                if (delShare) {
+                    shared.removeAt(k);
+                }
+            }
+        }
+
+        qDebug() << "Share " << shared.size();
+        Q_FOREACH(QString file, files) {
+            Q_FOREACH(Data datum, shared) {
+                if (datum.file == file) {
+                    QFile file(directory + QDir::separator() + datum.file);
+                    QByteArray ba;
+                    QString res;
+                    file.open(QIODevice::ReadOnly);
+                    for(int i{};i < datum.lineNum; i++) ba = file.readLine();
+                    if (ba.size() < 5) continue;
+                    ba.chop(2);
+                    QStringList split = QString(ba).split(" ");
+                    if (split.size() < 8) { //Full Sentence
+                        res = QString(ba);
+                    } else if (split.size() - datum.wordNum > 3 && datum.wordNum > 3) {
+                        res.append("... ");
+                        for(size_t i{datum.wordNum - 3}; i < datum.wordNum + 3;i++) {
+                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                                res.append(split.at(i) + " ");
+                        }
+                        res.append(" ...");
+
+                    } else if (split.size() - datum.wordNum > 3) { // NO END
+                        for(size_t i{0}; i < datum.wordNum + 3;i++)
+                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                                res.append(split.at(i) + " ");
+                        res.append(" ...");
+                    } else if (datum.wordNum > 3) { // NO START
+                        res.append("... ");
+                        for(size_t i{datum.wordNum - 3}; i < split.size();i++)
+                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
+                                res.append(split.at(i) + " ");
+                    }
+                    res = "|" + datum.file + QString(" -> L: %1 ").arg(datum.lineNum) +" "+ res;
+                    monitor->show(res, Qt::black);
+                    file.close();
+                }
+            }
+        }
 
     }
 }
 
 void TabDockWidget::slt_reset() {
-    qDebug() << "Gotcha";
 }

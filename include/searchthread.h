@@ -38,7 +38,7 @@ private:
     QStringList words;
     QTime *time;
     QString _search;
-    QList<Data> list;
+    QList<QList<Data> > list;
     QStringList wordList;
     void run();
     bool toShow{false};

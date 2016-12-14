@@ -30,10 +30,15 @@ Monitor::Monitor(QWidget *parent) : QTextEdit(parent) {
 }
 
 Monitor::~Monitor() {
-    QFile file("../../../output.html");
-    file.open(QIODevice::WriteOnly);
-    file.write(this->toHtml().toLatin1());
-    file.close();
+    QFileDialog fd;
+    QString str;
+    str = fd.getSaveFileName(this, "Save output File");
+    if (str.size() > 3) {
+        QFile file(str);
+        file.open(QIODevice::WriteOnly);
+        file.write(this->toHtml().toLatin1());
+        file.close();
+    }
 }
 
 void Monitor::show(QString _str, QColor _color) {
@@ -69,9 +74,10 @@ void Monitor::slt_show(ShowMaterial * _toShow) {
 void Monitor::slt_search(SearchResult* _list) {
 
 
-//    _list->result.at(0).
+    //    _list->result.at(0).
 
 
     this->setTextColor(Qt::red);
+    this->append(QString("Time Passed : %1").arg(_list->time));
     this->append(" -- SEARCH END -- ");
     this->setTextColor(Qt::black);}

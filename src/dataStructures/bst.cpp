@@ -26,7 +26,6 @@ BSTNode* BST::makeNode(Data *_data) {
     node->key_ = _data->key.toLower();
     node->values.insert(_data);
     size++;
-    qDebug() << size << node->key_;
     return node;
 }
 
@@ -75,7 +74,6 @@ QStringList BST::show(BSTNode* _node, QStringList& _list) {
 
     tStr = QString ("> %1 -> ").arg(_node->key_) + files;
     _list.append(tStr);
-    qDebug() << _node->key_ << _node->values.size();
 
     show(_node->rc, _list);
     return _list;

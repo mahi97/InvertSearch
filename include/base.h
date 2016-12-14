@@ -67,13 +67,14 @@ struct Summery {
 struct SearchResult {
 
     SearchResult() = default;
-    SearchResult(QList<Data> _l, QStringList _w) {
+    SearchResult(QList<QList<Data> > _l, QStringList _w) {
         result.append(_l);
         words.append(_w);
     }
 
-    QList<Data> result;
+    QList<QList<Data> > result;
     QStringList words;
+    int time;
 };
 
 struct ShowMaterial {

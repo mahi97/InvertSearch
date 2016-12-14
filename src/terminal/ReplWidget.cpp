@@ -44,7 +44,6 @@ void ReplWidget::keyPressEvent(QKeyEvent *e) {
     handleHome();
     break;
   case Qt::Key_Control | Qt::Key_C:
-      qDebug() << "FFF";
       break;
   default:
     QPlainTextEdit::keyPressEvent(e);

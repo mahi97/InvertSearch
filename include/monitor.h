@@ -3,6 +3,7 @@
 
 #include <QTextEdit>
 #include <QScrollBar>
+#include <QFileDialog>
 
 #include "base.h"
 #include "searchthread.h"

@@ -42,7 +42,6 @@ QStringList Trie::show() {
     wordsCount = 0;
     QStringList list;
     return show(root, list);
-    qDebug() << size;
 }
 
 LinkedList* Trie::search(QString _word) {
