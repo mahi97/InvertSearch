@@ -61,8 +61,9 @@ int LinkedList::remove(Data* _node) {
                     first = first -> next;
                     delete cursor;
                     break;
-                } else if (i == m_size - 1) {
+                } else if (i == m_size) {
                     head = last;
+                    head -> next = NULL;
                     delete cursor;
                     break;
                 } else {

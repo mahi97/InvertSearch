@@ -6,6 +6,11 @@
 class LinkedList {
 
     struct Node {
+        Node() {
+            data = NULL;
+            next = NULL;
+        }
+
         Data* data;
         Node* next;
     };

@@ -35,7 +35,7 @@ void BST::remove(Data *_data, BSTNode *& _node, BSTNode *& _parent, bool left) {
         remove(_data, _node->lc, _node, true);
     } else {
         if (_node->values.remove(_data) == 0) {
-            del(_node, _parent, left);
+//            del(_node, _parent, left);
         }
     }
 }
