@@ -26,6 +26,9 @@ void TST::insert(Data *_data, TSTNode *& _node, size_t cursor) {
         if (cursor + 1 < _data->key.size()) {
             insert(_data, _node->eq, cursor + 1);
         } else {
+            if (_node->values.size() == 0) {
+                wordsCount++;
+            }
             _node->isEnd = true;
             _node->values.insert(_data);
             _node->key_ = _data->key;

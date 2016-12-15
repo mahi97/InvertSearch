@@ -21,7 +21,9 @@ public:
 
 
 private:
-    void insert(Data *_data, BSTNode *&_node);
+    void insert(Data *_data,
+                BSTNode *&_node);
+
     void remove(QString, BSTNode*&, BSTNode*&, bool left = false);
     void del(BSTNode*, BSTNode *_parent, bool left);
     QStringList show(BSTNode*, QStringList &_list);

@@ -35,6 +35,7 @@ void BST::remove(QString _data,
     remove(_data, _node->rc, _node, false);
     remove(_data, _node->lc, _node, true);
     if (_node->values.remove(_data) == 0) {
+        wordsCount--;
         del(_node, _parent, left);
     }
 }
@@ -98,6 +99,7 @@ BSTNode* BST::makeNode(Data *_data) {
     node->key_ = _data->key.toLower();
     node->values.insert(_data);
     size++;
+    wordsCount++;
     return node;
 }
 
@@ -129,7 +131,7 @@ QStringList BST::show(BSTNode* _node, QStringList& _list) {
     if (_node == NULL) return _list;
     QString tStr;
     QString files;
-    wordsCount++;
+//    wordsCount++;
     show(_node->lc, _list);
 
     QStringList buffer;

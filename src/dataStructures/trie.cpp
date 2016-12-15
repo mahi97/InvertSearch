@@ -27,9 +27,13 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
             if (((cursor + 1) < _data->key.size())) {
                 insert(_data, _child, ++cursor);
             } else {
+                if (_child->values.size() == 0) {
+                    wordsCount++;
+                }
                 _child->values.insert(_data);
                 _child->isEnd = true;
                 _child->key_ = _data->key.toLower();
+
             }
             return;
         }
@@ -44,7 +48,6 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
 }
 
 QStringList Trie::show() {
-    wordsCount = 0;
     QStringList list;
     return show(root, list);
 }
@@ -80,7 +83,7 @@ QStringList Trie::show(TrieNode *_node, QStringList& _list) {
     if (_node == NULL) return _list;
 
     if (_node->isEnd) {
-        wordsCount++;
+//        wordsCount++;
         QStringList buffer;
         QString files;
         Q_FOREACH(Data data, _node->values.toQList()) {
@@ -94,7 +97,6 @@ QStringList Trie::show(TrieNode *_node, QStringList& _list) {
         }
         files.chop(1);
         QString name = _node->key_;
-        name.chop(4);
         files = QString("|%1 -> ").arg(name) + files;
         _list.append(files);
     }
@@ -110,6 +112,9 @@ TrieNode* Trie::makeNode(Data * _data, size_t cursor) {
     node->c.clear();
     node->isEnd = false;
     if ((cursor + 1) >= _data->key.size()) {
+        if (node->values.size() == 0) {
+            wordsCount++;
+        }
         node->isEnd = true;
         node->key_ = _data->key.toLower();
         node->values.insert(_data);
