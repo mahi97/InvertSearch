@@ -16,17 +16,27 @@ class TST : public Tree
 
 public:
     TST();
-    virtual void insert(Data*)       ;
-    virtual void remove(QString);
+    virtual void        insert(Data*);
+    virtual void        remove(QString);
+    virtual LinkedList* search(QString);
     virtual QStringList show();
 
-    virtual LinkedList* search(QString)     ;
 
 private:
-    void insert(Data *, TSTNode*&, size_t cursor);
-    QStringList show(TSTNode* _node, QStringList &_list);
-    TSTNode* makeNode(Data* _data, size_t cursor);
-    void search(QString, int, LinkedList* &, TSTNode*);
+    void        insert  (Data *,
+                         TSTNode*&,
+                         size_t);
+
+    void        search  (QString,
+                         int,
+                         LinkedList* &,
+                         TSTNode*);
+
+    TSTNode*    makeNode(Data*,
+                         size_t);
+
+    QStringList show    (TSTNode*,
+                         QStringList &);
 
     TSTNode* root;
 

@@ -33,7 +33,6 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
             search , SLOT(slt_search(QString)),
             Qt::QueuedConnection);
 
-
     connect(search , SIGNAL(sig_wordFinished()),
             this   , SLOT(slt_searchFinished()),
             Qt::QueuedConnection);
@@ -202,7 +201,7 @@ void TerminalDockWidget::proccesSrch(const QStringList & _cmds) {
                 wordsToSearch++;
             }
 
-            //            emit resualtReady("Start Searching for Words ... ");
+            //emit resualtReady("Start Searching for Words ... ");
             monitor->setTextColor(Qt::red);
             monitor->append(" -- SEARCH START -- ");
             monitor->setTextColor(Qt::black);

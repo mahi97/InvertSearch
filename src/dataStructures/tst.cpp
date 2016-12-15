@@ -9,8 +9,7 @@ void TST::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
-void TST::remove(QString)
-{
+void TST::remove(QString) {
 
 }
 

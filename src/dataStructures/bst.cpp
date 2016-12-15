@@ -25,7 +25,11 @@ void BST::insert(Data *_data, BSTNode*& _node) {
     }
 }
 
-void BST::remove(QString _data, BSTNode *& _node, BSTNode *& _parent, bool left) {
+void BST::remove(QString _data,
+                 BSTNode *& _node,
+                 BSTNode *& _parent,
+                 bool left) {
+
     if (_node == NULL) return;
 
     remove(_data, _node->rc, _node, false);
@@ -37,33 +41,30 @@ void BST::remove(QString _data, BSTNode *& _node, BSTNode *& _parent, bool left)
 
 void BST::del(BSTNode *_node, BSTNode* _parent, bool left) {
 
-    //TODO : FIX THIS
-    return;
-
     if (_node == root) {
-        // TODO : fix this !
-        qDebug() << "Please Don't remove root";
+        delete root;
+        root = NULL;
         return;
     }
     if (_node->lc == NULL && _node->rc == NULL) { // No Child
         if (left) {
-            _parent->lc == NULL;
+            _parent->lc = NULL;
         } else {
-            _parent->rc == NULL;
+            _parent->rc = NULL;
         }
         delete _node;
     } else if (_node->lc == NULL) { // One Child Left
         if (left) {
-            _parent->lc == _node->rc;
+            _parent->lc = _node->rc;
         } else {
-            _parent->rc == _node->rc;
+            _parent->rc = _node->rc;
         }
         delete _node;
     } else if (_node->rc == NULL) { // One Child Right
         if (left) {
-            _parent->lc == _node->lc;
+            _parent->lc = _node->lc;
         } else {
-            _parent->rc == _node->lc;
+            _parent->rc = _node->lc;
         }
     } else { // Two Child
         BSTNode* temp = _node->rc;
@@ -73,9 +74,20 @@ void BST::del(BSTNode *_node, BSTNode* _parent, bool left) {
             temp = temp->lc;
         }
 
-        tempPar -> lc    = temp  -> rc;
-        temp    -> rc    = _node -> rc;
-        temp    -> lc    = _node -> lc;
+        if (tempPar != _node) {
+            tempPar -> lc    = temp  -> rc;
+            temp    -> rc    = _node -> rc;
+            temp    -> lc    = _node -> lc;
+        } else {
+            temp -> lc = _node -> lc;
+        }
+
+        if (left) {
+            _parent -> lc = temp;
+        } else {
+            _parent -> rc = temp;
+        }
+
         delete _node;
 
     }

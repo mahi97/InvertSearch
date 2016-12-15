@@ -84,7 +84,7 @@ int LinkedList::remove(Data* _node) {
 int LinkedList::remove(QString _file) {
     if (first == NULL) return 0;
     Node* temp = first;
-    while(temp->next != NULL) {
+    while(temp != NULL) {
         if (temp->data->file == _file) {
             remove(temp->data);
         }
