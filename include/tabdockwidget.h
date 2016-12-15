@@ -76,6 +76,10 @@ public slots:
     void slt_del(QString);
     void slt_showLines(SearchResult*);
 
+private:
+    void showDatum(const Data &);
+    void showLine (const QString&, const Data&);
+
 
 signals:
     void sig_changeTree(ETree);

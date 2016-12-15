@@ -113,7 +113,6 @@ QStringList Trie::show(TrieNode *_node, QStringList& _list) {
     if (_node == NULL) return _list;
 
     if (_node->isEnd) {
-//        wordsCount++;
         QStringList buffer;
         QString files;
         Q_FOREACH(Data data, _node->values.toQList()) {

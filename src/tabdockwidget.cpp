@@ -36,10 +36,10 @@ TabDockWidget::TabDockWidget(QWidget *parent)
             search           , SLOT(slt_chooseTree(ETree)));
     connect(this             , SIGNAL(sig_fileToBuild(File*)),
             search           , SLOT(slt_buildFile(File*)),
-                               Qt::QueuedConnection);
+            Qt::QueuedConnection);
     connect(search           , SIGNAL(sig_summery(Summery*)),
             this             , SLOT(slt_buildComplete()),
-                               Qt::QueuedConnection);
+            Qt::QueuedConnection);
 
     connect(btnReset         , SIGNAL(clicked(bool)),
             this             , SLOT(slt_reset()));
@@ -48,7 +48,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
             this             , SLOT(slt_textEdit()));
     connect(search           , SIGNAL(sig_summery(Summery*)),
             this             , SLOT(slt_reset()),
-                               Qt::QueuedConnection);
+            Qt::QueuedConnection);
     connect(search           , SIGNAL(sig_searchFinished(SearchResult*)),
             this             , SLOT(slt_showLines(SearchResult*)));
 }
@@ -248,104 +248,101 @@ void TabDockWidget::slt_del(QString _name) {
 }
 
 void TabDockWidget::slt_showLines(SearchResult * _sr) {
-    if (_sr->words.size() == 1) {
+    if (_sr->words.size() <= 1) {
         Q_FOREACH(Data datum, _sr->result[0]) {
-            QFile file(directory + QDir::separator() + datum.file);
-            QByteArray ba;
-            QString res;
-            file.open(QIODevice::ReadOnly);
-            for(int i{};i < datum.lineNum; i++) ba = file.readLine();
-            if (ba.size() < 5) continue;
-            ba.chop(2);
-            QStringList split = QString(ba).split(" ");
-            if (split.size() < 8) { //Full Sentence
-                res = QString(ba);
-            } else if (split.size() - datum.wordNum > 3 && datum.wordNum > 3) {
-                res.append("... ");
-                for(size_t i{datum.wordNum - 3}; i < datum.wordNum + 3;i++) {
-                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                        res.append(split.at(i) + " ");
-                }
-                res.append(" ...");
-
-            } else if (split.size() - datum.wordNum > 3) { // NO END
-                for(size_t i{0}; i < datum.wordNum + 3;i++)
-                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                        res.append(split.at(i) + " ");
-                res.append(" ...");
-            } else if (datum.wordNum > 3) { // NO START
-                res.append("... ");
-                for(size_t i{datum.wordNum - 3}; i < split.size();i++)
-                    if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                        res.append(split.at(i) + " ");
-            }
-            res = "|" + datum.file + QString(" -> L: %1 ").arg(datum.lineNum) +" "+ res;
-            monitor->show(res, Qt::black);
-            file.close();
+            showDatum(datum);
         }
     } else {
-        bool delShare = true;
         QList<Data> shared = _sr->result[0];
+        QList<bool> sameLine;
         QStringList files;
+        for (int i{}; i < shared.size();i++)
+            sameLine.append(true);
+        bool common = false;
         for (size_t i{1}; i < _sr->words.size(); i++) {
             for (size_t k{}; k < shared.size(); k++) {
-                delShare = true;
+                common = false;
                 for(size_t j{}; j < _sr->result[i].size(); j++) {
                     if (shared[k].file == _sr->result[i][j].file) {
-                        if (!files.contains(shared[k].file))
-                            files.append(shared[k].file);
-                        shared.append(_sr->result[i][j]);
-                        _sr->result[i].removeAt(j);
-                        delShare = false;
-                    }
-                }
-                if (delShare) {
-                    shared.removeAt(k);
-                }
-            }
-        }
-
-        qDebug() << "Share " << shared.size();
-        Q_FOREACH(QString file, files) {
-            Q_FOREACH(Data datum, shared) {
-                if (datum.file == file) {
-                    QFile file(directory + QDir::separator() + datum.file);
-                    QByteArray ba;
-                    QString res;
-                    file.open(QIODevice::ReadOnly);
-                    for(int i{};i < datum.lineNum; i++) ba = file.readLine();
-                    if (ba.size() < 5) continue;
-                    ba.chop(2);
-                    QStringList split = QString(ba).split(" ");
-                    if (split.size() < 8) { //Full Sentence
-                        res = QString(ba);
-                    } else if (split.size() - datum.wordNum > 3 && datum.wordNum > 3) {
-                        res.append("... ");
-                        for(size_t i{datum.wordNum - 3}; i < datum.wordNum + 3;i++) {
-                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                                res.append(split.at(i) + " ");
+                        common = true;
+                        if (i == _sr->words.size() - 1) {
+                            if (!files.contains(shared[k].file)) {
+                                files.append(shared[k].file);
+                            }
                         }
-                        res.append(" ...");
-
-                    } else if (split.size() - datum.wordNum > 3) { // NO END
-                        for(size_t i{0}; i < datum.wordNum + 3;i++)
-                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                                res.append(split.at(i) + " ");
-                        res.append(" ...");
-                    } else if (datum.wordNum > 3) { // NO START
-                        res.append("... ");
-                        for(size_t i{datum.wordNum - 3}; i < split.size();i++)
-                            if (split.at(i) != "\n" && split.at(i) != "\r\n")
-                                res.append(split.at(i) + " ");
                     }
-                    res = "|" + datum.file + QString(" -> L: %1 ").arg(datum.lineNum) +" "+ res;
-                    monitor->show(res, Qt::black);
-                    file.close();
+                }
+                if (!common) {
+                    shared.removeAt(k--);
                 }
             }
         }
+
+        qDebug() << "Share " << files.size();
+        QString result = "|";
+        Q_FOREACH(QString file, files) {
+            file.chop(4);
+            result += file + ", ";
+        }
+        monitor->show(result, Qt::black);
+    }
+}
+
+void TabDockWidget::showDatum(const Data& _datum) {
+    QFile file(directory + QDir::separator() + _datum.file);
+    QByteArray byteArr;
+    file.open(QIODevice::ReadOnly);
+    for(int i{};i < _datum.lineNum; i++) byteArr = file.readLine();
+    byteArr.chop(2);
+    showLine(QString(byteArr), _datum);
+    file.close();
+}
+
+void TabDockWidget::showLine(const QString& _line,
+                             const Data&    _datum) {
+    QString result;
+    QString start{};
+    QString end{};
+    QStringList split = _line.split(" ");
+    if (split.size() < 8) { //Full Sentence
+        result = _line;
+
+    } else {
+        if (_datum.wordNum > 3) { // START WITH ...
+            start = " ... ";
+            for(size_t i{0}; i < _datum.wordNum - 3;i++) {
+                if (split.first() != "\n" && split.first() != "\r\n") {
+                    split.pop_front();
+                }
+            }
+        }
+        int sc = split.count() - _datum.wordNum;
+        if (sc > 3) { // END WITH ...
+            for(int i{split.size()}; i > _datum.wordNum + 3;i--) {
+                if (split.last() != "\n" && split.last() != "\r\n") {
+                    split.pop_back();
+                }
+            }
+            end = " ... ";
+        }
+
+        Q_FOREACH(QString word, split) {
+            if (word != "\n" && word != "\r\n") {
+                result.append(word + " ");
+            }
+        }
+
 
     }
+
+    result = "|"
+            + _datum.file
+            + QString(" -> L: %1 ").arg(_datum.lineNum)
+            + start
+            + result
+            + end;
+
+    monitor->show(result, Qt::black);
 }
 
 void TabDockWidget::slt_reset() {

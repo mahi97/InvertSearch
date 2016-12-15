@@ -47,7 +47,6 @@ TSTNode* TST::makeNode(Data* _data, size_t cursor) {
 }
 
 QStringList TST::show() {
-    wordsCount = 0;
     QStringList tList;
     return show(root, tList);
 }
@@ -122,7 +121,6 @@ QStringList TST::show(TSTNode *_node, QStringList& _list) {
     show(_node->lt, _list);
 
     if (_node->isEnd) {
-        wordsCount++;
         QStringList buffer;
         QString files;
         Q_FOREACH(Data data, _node->values.toQList()) {

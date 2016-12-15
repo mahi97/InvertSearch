@@ -116,7 +116,6 @@ void BST::search(QString _word, LinkedList* &_list, BSTNode *_node) {
     }
 }
 QStringList BST::show() {
-    wordsCount = 0;
     QStringList tlist;
     return show(root, tlist);
 }
@@ -132,7 +131,6 @@ QStringList BST::show(BSTNode* _node, QStringList& _list) {
     if (_node == NULL) return _list;
     QString tStr;
     QString files;
-//    wordsCount++;
     show(_node->lc, _list);
 
     QStringList buffer;
