@@ -17,7 +17,7 @@ TerminalDockWidget::TerminalDockWidget(QWidget *parent)
             repl   , SLOT(result(QString)));
 
     connect(this   , SIGNAL(sig_add(QString)),
-            tabDock, SLOT(slt_add(QString)));
+            tabDock, SLOT(slt_update(QString)));
 
     connect(this   , SIGNAL(sig_del(QString)),
             tabDock, SLOT(slt_del(QString)));

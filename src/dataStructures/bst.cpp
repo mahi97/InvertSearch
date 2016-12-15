@@ -35,12 +35,13 @@ void BST::remove(QString _data,
     remove(_data, _node->rc, _node, false);
     remove(_data, _node->lc, _node, true);
     if (_node->values.remove(_data) == 0) {
-        wordsCount--;
         del(_node, _parent, left);
     }
 }
 
 void BST::del(BSTNode *_node, BSTNode* _parent, bool left) {
+
+    wordsCount--;
 
     if (_node == root) {
         delete root;

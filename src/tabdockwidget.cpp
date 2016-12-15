@@ -26,16 +26,31 @@ TabDockWidget::TabDockWidget(QWidget *parent)
     search->directory = &directory;
 
     // Conecctions
-    connect(btnBrowse, SIGNAL(clicked(bool)), this, SLOT(slt_browse()));
-    connect(btnBuild , SIGNAL(clicked(bool)), this, SLOT(slt_build()));
-    connect(cmbDataStrct, SIGNAL(currentIndexChanged(QString)), this, SLOT(slt_changeTree(QString)));
-    connect(this, SIGNAL(sig_changeTree(ETree)), search, SLOT(slt_chooseTree(ETree)));
-    connect(this, SIGNAL(sig_fileToBuild(File*)), search, SLOT(slt_buildFile(File*)), Qt::QueuedConnection);
-    connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_buildComplete()), Qt::QueuedConnection);
-    connect(btnReset, SIGNAL(clicked(bool)), this, SLOT(slt_reset()));
-    connect(lineEditDirectory, SIGNAL(editingFinished()), this, SLOT(slt_textEdit()));
-    connect(search, SIGNAL(sig_summery(Summery*)), this, SLOT(slt_reset()), Qt::QueuedConnection);
-    connect(search, SIGNAL(sig_searchFinished(SearchResult*)), this, SLOT(slt_showLines(SearchResult*)));
+    connect(btnBrowse        , SIGNAL(clicked(bool)),
+            this             , SLOT(slt_browse()));
+    connect(btnBuild         , SIGNAL(clicked(bool)),
+            this             , SLOT(slt_build()));
+    connect(cmbDataStrct     , SIGNAL(currentIndexChanged(QString)),
+            this             , SLOT(slt_changeTree(QString)));
+    connect(this             , SIGNAL(sig_changeTree(ETree)),
+            search           , SLOT(slt_chooseTree(ETree)));
+    connect(this             , SIGNAL(sig_fileToBuild(File*)),
+            search           , SLOT(slt_buildFile(File*)),
+                               Qt::QueuedConnection);
+    connect(search           , SIGNAL(sig_summery(Summery*)),
+            this             , SLOT(slt_buildComplete()),
+                               Qt::QueuedConnection);
+
+    connect(btnReset         , SIGNAL(clicked(bool)),
+            this             , SLOT(slt_reset()));
+
+    connect(lineEditDirectory, SIGNAL(editingFinished()),
+            this             , SLOT(slt_textEdit()));
+    connect(search           , SIGNAL(sig_summery(Summery*)),
+            this             , SLOT(slt_reset()),
+                               Qt::QueuedConnection);
+    connect(search           , SIGNAL(sig_searchFinished(SearchResult*)),
+            this             , SLOT(slt_showLines(SearchResult*)));
 }
 
 TabDockWidget::~TabDockWidget() {
@@ -212,6 +227,7 @@ void TabDockWidget::slt_changeTree(QString _tree) {
 }
 
 void TabDockWidget::slt_del(QString _name) {
+    lastFiles.removeOne(_name);
     for(size_t i{}; i < files.size(); i++) {
         if (_name == files[i]->name) {
             for(size_t j{}; j < model->rowCount();j++) {

@@ -28,6 +28,8 @@ public:
 private:
     void search(QString, int, LinkedList *&, TrieNode*);
     void insert(Data*_data, TrieNode *&_node, size_t cursor);
+    void remove(QString, TrieNode*&, TrieNode*&, int);
+    void del(TrieNode*, TrieNode*, int);
     QStringList show(TrieNode* _node, QStringList &_list);
     TrieNode *makeNode(Data*_data, size_t cursor);
     TrieNode* root;

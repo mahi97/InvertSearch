@@ -9,8 +9,8 @@ void TST::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
-void TST::remove(QString) {
-
+void TST::remove(QString _file) {
+    remove(_file, root, root, 0);
 }
 
 void TST::insert(Data *_data, TSTNode *& _node, size_t cursor) {
@@ -72,6 +72,48 @@ void TST::search(QString _word,int _index , LinkedList* &_list, TSTNode*_node) {
         search(_word, ++_index, _list, _node->eq);
     } else {
         search(_word, _index, _list, _node->gt);
+    }
+}
+
+void TST::remove(QString _file,
+                 TSTNode *& _node,
+                 TSTNode *& _parent,
+                 int _link) {
+
+    if (_node == NULL) return;
+
+    remove(_file, _node->lt, _node,  -1);
+    remove(_file, _node->eq, _node,  0);
+    remove(_file, _node->gt, _node,  1);
+    if (_node->isEnd) {
+        if (_node->values.remove(_file) == 0) {
+            del(_node, _parent, _link);
+        }
+    }
+
+
+}
+
+void TST::del(TSTNode * _node, TSTNode * _parent, int _link) {
+    wordsCount--;
+    _node->isEnd = false;
+    _node->key_ = "";
+    if (_node -> gt == NULL
+    &&  _node -> eq == NULL
+    &&  _node -> lt == NULL) {
+
+        if (_link == -1) {
+            _parent -> lt = NULL;
+        } else if (_link == 0) {
+            _parent -> eq = NULL;
+        } else if (_link == 1) {
+            _parent -> gt = NULL;
+        } else {
+            qWarning() << "TST (DELETE) -> Wrong Linking ";
+        }
+
+        delete _node;
+
     }
 }
 

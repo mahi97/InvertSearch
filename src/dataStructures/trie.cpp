@@ -15,9 +15,8 @@ void Trie::insert(Data *_data) {
     insert(_data, root, 0);
 }
 
-void Trie::remove(QString)
-{
-
+void Trie::remove(QString _file) {
+    remove(_file, root, root, 0);
 }
 
 void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
@@ -45,6 +44,37 @@ void Trie::insert(Data * _data, TrieNode *& _node, size_t cursor) {
         insert(_data, tNode, ++cursor);
     }
 
+}
+
+void Trie::remove(QString     _file,
+                  TrieNode *& _node,
+                  TrieNode *& _parent,
+                  int         _link) {
+
+    if (_node == NULL) return;
+
+    int counter{};
+    Q_FOREACH (TrieNode* node, _node->c) {
+        remove(_file, node, _node, counter);
+        counter++;
+    }
+
+    if (_node->isEnd) {
+        if (_node->values.remove(_file) == 0) {
+            del(_node, _parent, _link);
+        }
+    }
+}
+
+void Trie::del(TrieNode * _node, TrieNode * _parent, int _link) {
+    wordsCount--;
+    _node->isEnd = false;
+    _node->key_ = "";
+
+    if (_node->c.isEmpty()) {
+        _parent -> c[_link] = NULL;
+        delete _node;
+    }
 }
 
 QStringList Trie::show() {
