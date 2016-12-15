@@ -46,9 +46,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
 
     connect(lineEditDirectory, SIGNAL(editingFinished()),
             this             , SLOT(slt_textEdit()));
-    connect(search           , SIGNAL(sig_summery(Summery*)),
-            this             , SLOT(slt_reset()),
-            Qt::QueuedConnection);
+
     connect(search           , SIGNAL(sig_searchFinished(SearchResult*)),
             this             , SLOT(slt_showLines(SearchResult*)));
 }
@@ -248,7 +246,11 @@ void TabDockWidget::slt_del(QString _name) {
 }
 
 void TabDockWidget::slt_showLines(SearchResult * _sr) {
-    if (_sr->words.size() <= 1) {
+    if (_sr->words.size() == 0) {
+        monitor->show("Nothing found", Qt::black);
+        return;
+    }
+    if (_sr->words.size() == 1) {
         Q_FOREACH(Data datum, _sr->result[0]) {
             showDatum(datum);
         }
@@ -346,4 +348,5 @@ void TabDockWidget::showLine(const QString& _line,
 }
 
 void TabDockWidget::slt_reset() {
+    monitor->clear();
 }
