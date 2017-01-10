@@ -6,22 +6,129 @@ BST::BST() : Tree(){
 }
 
 void BST::insert(Data* _data) {
-    insert(_data, root);
+    BSTNode* paroot = NULL;
+    insert(_data, root, paroot);
 }
 
 void BST::remove(QString _data) {
     remove(_data, root, root, false);
 }
 
-void BST::insert(Data *_data, BSTNode*& _node) {
+void BST::insert(Data *_data, BSTNode*& _node, BSTNode *&_par) {
+    addNode(_data, _node); //call insert inside
+    findBF(_node);
+    adjustTree(_node, _par);
+
+
+}
+
+void BST::adjustTree(BSTNode *&_node, BSTNode *&_par) {
+    if (_node == NULL) return;
+    bool shift[2]{false, false}; // False = Left, True = Right
+    if (_node->balanceFactor > 1) {
+        shift[0] = false;
+        shift[1] = (_node->lc->balanceFactor < 0); // it can't be 0
+
+    } else if (_node->balanceFactor < -1) {
+        shift[0] = true;
+        shift[1] = (_node->rc->balanceFactor < 0); // it can't be 0
+
+    } else {
+        return;
+
+    }
+
+
+    //TODO : use & instead of &&
+    if (shift[0] && shift[1])          {       // RR shift
+        shiftTree(_node    , _par , shift[0]);     // TRUE
+
+    } else if (!shift[0] && !shift[1]) {       // LL shift
+        shiftTree(_node    , _par , shift[0]);     // FALSE
+
+    } else if (shift[0] && !shift[1])  {       // RL shift
+        shiftTree(_node->rc, _node, shift[1]);     // FALSE
+        shiftTree(_node    , _par , shift[0]);     // TRUE
+
+    } else if (!shift[0] && shift[1])  {       // LR shift
+        shiftTree(_node->lc, _node, shift[1]);     // FALSE
+        shiftTree(_node    , _par , shift[0]);     // TRUE
+
+    }
+}
+
+void BST::shiftTree(BSTNode *&_node, BSTNode*& _par, bool shiftToLeft) {
+    if (_node == NULL) return;
+
+    if (_par == NULL) {
+        _par = new BSTNode();
+        _par->lc = _node;
+    }
+    BSTNode* tNode = _node;
+    bool leftChild = (_par->lc == _node);
+    if (shiftToLeft) {
+        if (leftChild) {
+
+            _par  -> lc       = tNode -> rc;
+            tNode -> rc       = tNode -> rc -> lc;
+            _par  -> lc -> lc = tNode;
+        } else {
+            _par  -> rc       = tNode -> rc;
+            tNode -> rc       = tNode -> rc -> lc;
+            _par  -> rc -> lc = tNode;
+        }
+    } else {
+        if (leftChild) {
+            _par  -> lc       = tNode -> lc;
+            tNode -> lc       = tNode -> lc -> rc;
+            _par  -> lc -> rc = tNode;
+        } else {
+            _par  -> rc       = tNode -> lc;
+            tNode -> lc       = tNode -> lc -> rc;
+            _par  -> rc -> rc = tNode;
+        }
+    }
+
+    int bf = rfindBF(_node);
+    qDebug() << bf;
+}
+
+void BST::addNode(Data *_data, BSTNode *&_node) {
     if (_node == NULL) {
         _node = makeNode(_data);
     } else if (_data->key.toLower() > _node->key_) {
-        insert(_data, _node->rc);
+        insert(_data, _node->rc, _node);
     } else if (_data->key.toLower() < _node->key_) {
-        insert(_data, _node->lc);
+        insert(_data, _node->lc, _node);
     } else {
         _node->values.insert(_data);
+    }
+}
+
+int BST::rfindBF(BSTNode *&_node) {
+    if (_node == NULL) return -1;
+    _node->balanceFactor = rfindBF(_node->lc) - rfindBF(_node->rc);
+    return abs(_node->balanceFactor);
+
+}
+
+void BST::findBF(BSTNode*& _node) {
+    if (_node->lc == NULL
+    &&  _node->rc == NULL) {
+        _node->balanceFactor = 0;
+
+    } else if (_node->lc == NULL) {
+        _node->balanceFactor = (-1)
+                - abs(_node->rc->balanceFactor);
+
+    } else if (_node->rc == NULL) {
+        _node->balanceFactor = abs(_node->lc->balanceFactor)
+                - (-1);
+
+    } else {
+        _node->balanceFactor = abs(_node->lc->balanceFactor)
+                - abs(_node->rc->balanceFactor);
+
     }
 }
 
@@ -99,6 +206,7 @@ BSTNode* BST::makeNode(Data *_data) {
     BSTNode* node = new BSTNode();
     node->key_ = _data->key.toLower();
     node->values.insert(_data);
+    node->balanceFactor = 0;
     size++;
     wordsCount++;
     return node;
