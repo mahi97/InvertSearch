@@ -13,7 +13,7 @@
 #include <QColor>
 
 // TODO : Add version control to base
-#define REVNUM "nightly"
+#define REVNUM "phase 2.0.0 BETA"
 
 
 #define Property(type,name,local) \

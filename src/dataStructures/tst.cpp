@@ -80,7 +80,7 @@ void TST::remove(QString _file,
                  int _link) {
 
     if (_node == NULL) return;
-
+    // TODO : why remove for every one
     remove(_file, _node->lt, _node,  -1);
     remove(_file, _node->eq, _node,  0);
     remove(_file, _node->gt, _node,  1);

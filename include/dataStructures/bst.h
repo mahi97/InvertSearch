@@ -30,6 +30,7 @@ private:
                  BSTNode *&_node);
     void findBF(BSTNode*& _node);
     int rfindBF(BSTNode*& _node);
+    void adjustTreeNode(BSTNode*& _node, BSTNode *&_par);
     void adjustTree(BSTNode*& _node, BSTNode *&_par);
     void shiftTree(BSTNode*& _node, BSTNode *&_par, bool shiftToLeft);
     void remove(QString, BSTNode*&, BSTNode*&, bool left = false);

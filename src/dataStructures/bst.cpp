@@ -17,12 +17,10 @@ void BST::remove(QString _data) {
 void BST::insert(Data *_data, BSTNode*& _node, BSTNode *&_par) {
     addNode(_data, _node); //call insert inside
     findBF(_node);
-    adjustTree(_node, _par);
-
-
+    adjustTreeNode(_node, _par);
 }
 
-void BST::adjustTree(BSTNode *&_node, BSTNode *&_par) {
+void BST::adjustTreeNode(BSTNode *&_node, BSTNode *&_par) {
     if (_node == NULL) return;
     bool shift[2]{false, false}; // False = Left, True = Right
     if (_node->balanceFactor > 1) {
@@ -57,6 +55,15 @@ void BST::adjustTree(BSTNode *&_node, BSTNode *&_par) {
     }
 }
 
+void BST::adjustTree(BSTNode *&_node, BSTNode *&_par) {
+    if (_node == NULL || _par == NULL) return;
+
+    adjustTree(_node->lc, _node);
+    adjustTree(_node->rc, _node);
+    adjustTreeNode(_node, _par);
+
+}
+
 void BST::shiftTree(BSTNode *&_node, BSTNode*& _par, bool shiftToLeft) {
     if (_node == NULL) return;
 
@@ -72,20 +79,24 @@ void BST::shiftTree(BSTNode *&_node, BSTNode*& _par, bool shiftToLeft) {
             _par  -> lc       = tNode -> rc;
             tNode -> rc       = tNode -> rc -> lc;
             _par  -> lc -> lc = tNode;
+
         } else {
             _par  -> rc       = tNode -> rc;
             tNode -> rc       = tNode -> rc -> lc;
             _par  -> rc -> lc = tNode;
+
         }
     } else {
         if (leftChild) {
             _par  -> lc       = tNode -> lc;
             tNode -> lc       = tNode -> lc -> rc;
             _par  -> lc -> rc = tNode;
+
         } else {
             _par  -> rc       = tNode -> lc;
             tNode -> lc       = tNode -> lc -> rc;
             _par  -> rc -> rc = tNode;
+
         }
     }
 
@@ -107,14 +118,18 @@ void BST::addNode(Data *_data, BSTNode *&_node) {
 
 int BST::rfindBF(BSTNode *&_node) {
     if (_node == NULL) return -1;
-    _node->balanceFactor = rfindBF(_node->lc) - rfindBF(_node->rc);
+    _node->balanceFactor = rfindBF(_node -> lc)
+            - rfindBF(_node -> rc);
+    _node->balanceFactor = rfindBF(_node -> lc)
+            - rfindBF(_node -> rc);
+
     return abs(_node->balanceFactor);
 
 }
 
 void BST::findBF(BSTNode*& _node) {
     if (_node->lc == NULL
-    &&  _node->rc == NULL) {
+            &&  _node->rc == NULL) {
         _node->balanceFactor = 0;
 
     } else if (_node->lc == NULL) {
@@ -138,7 +153,7 @@ void BST::remove(QString _data,
                  bool left) {
 
     if (_node == NULL) return;
-
+    // TOOD : why remove for everyone
     remove(_data, _node->rc, _node, false);
     remove(_data, _node->lc, _node, true);
     if (_node->values.remove(_data) == 0) {
@@ -151,55 +166,104 @@ void BST::del(BSTNode *_node, BSTNode* _parent, bool left) {
     wordsCount--;
 
     if (_node == root) {
-        delete root;
-        root = NULL;
-        return;
+        if (root->lc == NULL
+                &&  root->rc == NULL) {
+            delete root;
+            root = NULL;
+
+        } else if (root->lc == NULL) {
+            BSTNode* temp = root->rc;
+            delete root;
+            root = temp;
+
+        } else if (root->rc == NULL) {
+            BSTNode* temp = root->lc;
+            delete root;
+            root = temp;
+        } else {
+            BSTNode* temp = root -> rc;
+            BSTNode* tempPar = root;
+            while (temp->lc != NULL) {
+                tempPar = temp;
+                temp = temp->lc;
+            }
+
+            if (tempPar != root) {
+                tempPar -> lc    = temp  -> rc;
+                temp    -> rc    = root  -> rc;
+                temp    -> lc    = root  -> lc;
+            } else {
+                temp    -> lc    = root  -> lc;
+            }
+
+            delete root;
+            root = temp;
+        }
+
+        rfindBF(root);
+        adjustTree(root, root);
+
+    } else {
+        if (_node->lc == NULL && _node->rc == NULL) { // No Child
+            if (left) {
+                _parent->lc = NULL;
+            } else {
+                _parent->rc = NULL;
+            }
+            delete _node;
+
+        } else if (_node->lc == NULL) { // One Child Left
+            if (left) {
+                _parent->lc = _node->rc;
+            } else {
+                _parent->rc = _node->rc;
+            }
+            delete _node;
+
+        } else if (_node->rc == NULL) { // One Child Right
+            if (left) {
+                _parent->lc = _node->lc;
+            } else {
+                _parent->rc = _node->lc;
+            }
+            delete _node;
+
+        } else { // Two Child
+            BSTNode* temp = _node->rc;
+            BSTNode* tempPar = _node;
+            while (temp->lc != NULL) {
+                tempPar = temp;
+                temp = temp->lc;
+            }
+
+            if (tempPar != _node) {
+                tempPar -> lc    = temp  -> rc;
+                temp    -> rc    = _node -> rc;
+                temp    -> lc    = _node -> lc;
+            } else {
+                temp -> lc = _node -> lc;
+            }
+
+            if (left) {
+                _parent -> lc = temp;
+            } else {
+                _parent -> rc = temp;
+            }
+
+            delete _node;
+        }
+
+        rfindBF(_parent);
+        if (left) {
+            adjustTree(_parent->lc, _parent);
+
+        } else {
+            adjustTree(_parent->rc, _parent);
+
+        }
     }
-    if (_node->lc == NULL && _node->rc == NULL) { // No Child
-        if (left) {
-            _parent->lc = NULL;
-        } else {
-            _parent->rc = NULL;
-        }
-        delete _node;
-    } else if (_node->lc == NULL) { // One Child Left
-        if (left) {
-            _parent->lc = _node->rc;
-        } else {
-            _parent->rc = _node->rc;
-        }
-        delete _node;
-    } else if (_node->rc == NULL) { // One Child Right
-        if (left) {
-            _parent->lc = _node->lc;
-        } else {
-            _parent->rc = _node->lc;
-        }
-    } else { // Two Child
-        BSTNode* temp = _node->rc;
-        BSTNode* tempPar = _node;
-        while (temp->lc != NULL) {
-            tempPar = temp;
-            temp = temp->lc;
-        }
 
-        if (tempPar != _node) {
-            tempPar -> lc    = temp  -> rc;
-            temp    -> rc    = _node -> rc;
-            temp    -> lc    = _node -> lc;
-        } else {
-            temp -> lc = _node -> lc;
-        }
 
-        if (left) {
-            _parent -> lc = temp;
-        } else {
-            _parent -> rc = temp;
-        }
-
-        delete _node;
-
-    }
 }
 
 BSTNode* BST::makeNode(Data *_data) {
