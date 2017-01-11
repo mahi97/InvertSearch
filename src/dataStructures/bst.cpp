@@ -36,19 +36,17 @@ void BST::adjustTreeNode(BSTNode *&_node, BSTNode *&_par) {
 
     }
 
-
-    //TODO : use & instead of &&
-    if (shift[0] && shift[1])          {       // RR shift
+    if (shift[0] & shift[1])          {       // RR shift
         shiftTree(_node    , _par , shift[0]);     // TRUE
 
-    } else if (!shift[0] && !shift[1]) {       // LL shift
+    } else if (!shift[0] & !shift[1]) {       // LL shift
         shiftTree(_node    , _par , shift[0]);     // FALSE
 
-    } else if (shift[0] && !shift[1])  {       // RL shift
+    } else if (shift[0] & !shift[1])  {       // RL shift
         shiftTree(_node->rc, _node, shift[1]);     // FALSE
         shiftTree(_node    , _par , shift[0]);     // TRUE
 
-    } else if (!shift[0] && shift[1])  {       // LR shift
+    } else if (!shift[0] & shift[1])  {       // LR shift
         shiftTree(_node->lc, _node, shift[1]);     // FALSE
         shiftTree(_node    , _par , shift[0]);     // TRUE
 
@@ -153,9 +151,9 @@ void BST::remove(QString _data,
                  bool left) {
 
     if (_node == NULL) return;
-    // TOOD : why remove for everyone
     remove(_data, _node->rc, _node, false);
     remove(_data, _node->lc, _node, true);
+
     if (_node->values.remove(_data) == 0) {
         del(_node, _parent, left);
     }
