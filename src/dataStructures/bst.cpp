@@ -70,6 +70,7 @@ void BST::shiftTree(BSTNode *&_node, BSTNode*& _par, bool shiftToLeft) {
         _par->lc = _node;
     }
     BSTNode* tNode = _node;
+    // TODO : do it like TST
     bool leftChild = (_par->lc == _node);
     if (shiftToLeft) {
         if (leftChild) {
@@ -118,6 +119,7 @@ int BST::rfindBF(BSTNode *&_node) {
     if (_node == NULL) return -1;
     _node->balanceFactor = rfindBF(_node -> lc)
             - rfindBF(_node -> rc);
+    // TODO : Check Below
     _node->balanceFactor = rfindBF(_node -> lc)
             - rfindBF(_node -> rc);
 
@@ -127,20 +129,20 @@ int BST::rfindBF(BSTNode *&_node) {
 
 void BST::findBF(BSTNode*& _node) {
     if (_node->lc == NULL
-            &&  _node->rc == NULL) {
+    &&  _node->rc == NULL) {
         _node->balanceFactor = 0;
 
     } else if (_node->lc == NULL) {
         _node->balanceFactor = (-1)
-                - abs(_node->rc->balanceFactor);
+                             - abs(_node->rc->balanceFactor);
 
     } else if (_node->rc == NULL) {
         _node->balanceFactor = abs(_node->lc->balanceFactor)
-                - (-1);
+                             - (-1);
 
     } else {
         _node->balanceFactor = abs(_node->lc->balanceFactor)
-                - abs(_node->rc->balanceFactor);
+                             - abs(_node->rc->balanceFactor);
 
     }
 }
