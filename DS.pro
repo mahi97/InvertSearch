@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     searchthread.cpp \
     dataStructures/linkedlist.cpp \
     src/terminal/ReplWidget.cpp \
-    src/monitor.cpp
+    src/monitor.cpp \
+    src/dataStructures/hash.cpp
 
 HEADERS  += include/mainwindow.h \
     include/tabdockwidget.h \
@@ -38,7 +39,8 @@ HEADERS  += include/mainwindow.h \
     include/dataStructures/linkedlist.h \
     include/terminal/ReplWidget.h \
     include/monitor.h \
-    include/dataStructures/stack.h
+    include/dataStructures/stack.h \
+    include/dataStructures/hash.h
 
 
 INCLUDEPATH += $$PWD/include

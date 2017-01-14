@@ -13,8 +13,7 @@ enum class ETree {
     BST,
     TST,
     Trie,
-    BalancedBST,
-    BalancedTST
+    Hash
 };
 
 
@@ -31,7 +30,6 @@ public:
 private:
     ETree treeEnum;
     Tree* treeInvert;
-    Tree* treeForward;
     QStringList stopWord;
     QFile* file;
     QList<File*> files;

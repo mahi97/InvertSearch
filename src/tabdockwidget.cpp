@@ -13,8 +13,7 @@ TabDockWidget::TabDockWidget(QWidget *parent)
                 << "Binary Search Tree (BST)"
                 << "Ternary Search Tree (TST)"
                 << "Trie"
-                << "Balanced BST"
-                << "Balanced TST";
+                << "Hash";
 
 
     fillLayout(control);
@@ -216,9 +215,7 @@ void TabDockWidget::slt_changeTree(QString _tree) {
     else if(_tree == dataStructs[3])
         emit sig_changeTree(ETree::Trie);
     else if (_tree == dataStructs[4])
-        emit sig_changeTree(ETree::BalancedBST);
-    else if (_tree == dataStructs[5])
-        emit sig_changeTree(ETree::BalancedTST);
+        emit sig_changeTree(ETree::Hash);
     else
         emit sig_changeTree(ETree::None);
 

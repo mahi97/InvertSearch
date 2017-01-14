@@ -157,11 +157,8 @@ void SearchThread::slt_chooseTree(ETree _tree) {
     case ETree::Trie:
         treeInvert = new Trie();
         break;
-    case ETree::BalancedBST:
-        treeInvert = new BST();
-        treeInvert->setBalanced(true);
-    case ETree::BalancedTST:
-        treeInvert = new TST();
+    case ETree::Hash:
+        treeInvert = new Hash();
         treeInvert->setBalanced(true);
     default:
         break;
