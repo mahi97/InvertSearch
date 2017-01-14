@@ -34,7 +34,7 @@ private:
     void        del           (TSTNode *, TSTNode*, int);
     void        findBF        (TSTNode *& _node);
     int         rFindBF       (TSTNode *& _node);
-    void        adjustTree    (TSTNode *&);
+    void        adjustTree    (TSTNode *&, TSTNode *&);
     void        adjustTreeNode(TSTNode *&, TSTNode *&);
     void        shiftTree     (TSTNode *&, TSTNode *&, bool);
     TSTNode*    makeNode      (Data*, size_t);

@@ -98,8 +98,6 @@ void TST::shiftTree(TSTNode *& _node, TSTNode *& _par, bool _shiftToLeft) {
     }
     TSTNode* tNode = _node;
 
-//    TSTNode*& tParChild = ((_par -> lt == _node) ? _par -> lt : _par -> eq);
-//    tParChild = ((_par -> gt == _node) ? _par -> gt : tParChild);
     int c{};
     if (_par -> lt == _node) {
         c = -1;
@@ -193,6 +191,15 @@ int TST::rFindBF(TSTNode *&_node) {
     return abs(_node->balanceFactor);
 }
 
+void TST::adjustTree(TSTNode *& _root, TSTNode*& _par) {
+    if (root == NULL || _par == NULL) return;
+
+    adjustTree(_root->lt, _root);
+    adjustTree(_root->eq, _root);
+    adjustTree(_root->gt, _root);
+    adjustTreeNode(_root, _par);
+}
+
 TSTNode* TST::makeNode(Data* _data, size_t cursor) {
     TSTNode* node = new TSTNode();
     node->key = _data->key.toLower().at(cursor);
@@ -272,6 +279,8 @@ void TST::del(TSTNode * _node, TSTNode * _parent, int _link) {
 
         delete _node;
 
+        rFindBF(root);
+        adjustTree(root, root);
     }
 }
 

@@ -70,7 +70,6 @@ void BST::shiftTree(BSTNode *&_node, BSTNode*& _par, bool shiftToLeft) {
         _par->lc = _node;
     }
     BSTNode* tNode = _node;
-    // TODO : do it like TST
     bool leftChild = (_par->lc == _node);
     if (shiftToLeft) {
         if (leftChild) {
