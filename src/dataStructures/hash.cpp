@@ -8,14 +8,14 @@ Hash::Hash() : Tree() {
 
 void Hash::insert(Data *_data) {
     unsigned char tKey = hashFunction(_data->key);
-    
+
     for (int i{0}; i < table[tKey].list.size(); i++) {
         if (table[tKey].list.at(i)->key_.toLower() == _data->key.toLower()) {
             table[tKey].list.at(i)->values.insert(_data);
             return;
         }
     }
-    HNode* tempNode = makeNode(_data);
+    Node* tempNode = makeNode(_data);
     table[tKey].list.append(tempNode);
     wordsCount++;
 
@@ -28,8 +28,8 @@ void Hash::insert(Data *_data) {
 
 }
 
-HNode* Hash::makeNode(Data* _data) {
-    HNode* node = new HNode();
+Node *Hash::makeNode(Data* _data) {
+    Node* node = new Node();
     node->key_ = _data->key.toLower();
     node->values.insert(_data);
     size++;
