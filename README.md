@@ -1,9 +1,17 @@
-DS Search Project
+Search Project
 =====
 
-First DS Project (simple search using invert indexing)
+Simple Search Using Invert Indexing
+by implementation of 
+  - Balanced BST (Binary Search tree - AVL)
+  - Balanced TST (Ternary Search tree)
+  - Trie
+  - Hash
 
-
+Other Datastructure that implemeted in this project :
+  - LinkedList
+  - Stack
+  
 Software Requirements
 ---------------------
 
